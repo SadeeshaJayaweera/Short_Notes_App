@@ -1,358 +1,722 @@
-# Short Notes - AI-Powered Note Taking Application
+<div align="center">
 
-A fullstack AI-powered notes application that automatically converts long documents, PDFs, and Word files into concise bullet-point summaries using OpenAI's GPT-4.
+# 📝 Short Notes
 
-## 🌟 Features
+### AI-Powered Note Taking That Actually Makes Sense
 
-### Core Features
-- **Multi-Format Support**: Upload PDFs, Word documents, or paste text
-- **AI-Powered Summarization**: Automatically converts content into bullet-point summaries using GPT-4
-- **Auto Title Generation**: Intelligent title generation based on content
-- **Version History**: Track all changes and restore previous versions
+*Transform lengthy documents into crystal-clear bullet points in seconds*
 
-### Organization & Management
-- **Folder Organization**: Create and organize notes into folders with custom colors
-- **Tags System**: Tag notes for better categorization and search
-- **Search Functionality**: Full-text search across all notes with fuzzy matching
-- **Favorites & Pinning**: Mark important notes as favorites or pin them
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-5.0-2D3748)](https://www.prisma.io/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991)](https://openai.com/)
 
-### Export & Sharing
-- **Multiple Export Formats**: Export to PDF, Word (.docx), Markdown, HTML, and JSON
-- **Easy Sharing**: Generate shareable links with configurable permissions
-- **Share Control**: Set expiration dates and edit permissions for shared notes
+[Live Demo](#) • [Documentation](#) • [Report Bug](https://github.com/yourusername/short-notes/issues) • [Request Feature](https://github.com/yourusername/short-notes/issues)
 
-### User Experience
-- **Dark/Light Mode**: Full theme support with next-themes
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
-- **Real-time Updates**: Instant UI updates with React
-- **Toast Notifications**: User-friendly feedback for all actions
+</div>
 
-### Security & Authentication
-- **Email/Password Authentication**: Secure signup with bcryptjs hashing
-- **OAuth Integration**: Sign in with Google or GitHub
-- **Session Management**: JWT-based session handling with NextAuth
-- **Database Encryption**: Secure data storage with Prisma
+---
 
-## 🚀 Tech Stack
+## ✨ What Makes Short Notes Special?
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+### 🤖 AI-Powered
+GPT-4 automatically converts your lengthy documents into concise, actionable bullet points
+
+</td>
+<td width="33%" align="center">
+
+### 🚀 Lightning Fast
+Upload, process, and summarize documents in seconds, not minutes
+
+</td>
+<td width="33%" align="center">
+
+### 🔒 Secure & Private
+Enterprise-grade security with OAuth, JWT, and encrypted database storage
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🎯 Key Features
+
+<details open>
+<summary><b>📄 Multi-Format Document Processing</b></summary>
+<br>
+
+- ✅ **PDF Support** - Extract text from any PDF document
+- ✅ **Word Documents** - Process .docx and .doc files seamlessly
+- ✅ **Plain Text** - Paste or type content directly
+- ✅ **Batch Processing** - Handle multiple files at once
+
+</details>
+
+<details open>
+<summary><b>🧠 Intelligent AI Features</b></summary>
+<br>
+
+- 🎯 **Smart Summarization** - GPT-4 powered bullet-point generation
+- 📝 **Auto Title Generation** - Intelligent titles based on content
+- 🏷️ **Auto-Tagging** (Coming Soon) - Automatic tag suggestions
+- 📊 **Sentiment Analysis** (Coming Soon) - Understand document tone
+
+</details>
+
+<details open>
+<summary><b>🗂️ Organization & Management</b></summary>
+<br>
+
+- 📁 **Folder System** - Create folders with custom colors
+- 🏷️ **Tagging** - Tag notes for better categorization
+- 🔍 **Powerful Search** - Full-text search with fuzzy matching
+- ⭐ **Favorites & Pinning** - Quick access to important notes
+- 📜 **Version History** - Track changes and restore previous versions
+
+</details>
+
+<details open>
+<summary><b>🌐 Export & Sharing</b></summary>
+<br>
+
+- 📥 **Multiple Formats** - Export to PDF, Word, Markdown, HTML, JSON
+- 🔗 **Shareable Links** - Generate secure sharing links
+- 🔐 **Permission Control** - Set view-only or edit access
+- ⏰ **Expiration Dates** - Time-limited sharing
+- 📱 **Responsive Design** - Access from any device
+
+</details>
+
+<details open>
+<summary><b>🎨 User Experience</b></summary>
+<br>
+
+- 🌓 **Dark/Light Mode** - Full theme customization
+- 📱 **Responsive Design** - Perfect on desktop, tablet, and mobile
+- ⚡ **Real-time Updates** - Instant UI feedback
+- 🔔 **Toast Notifications** - User-friendly action feedback
+- ♿ **Accessibility** - WCAG compliant interface
+
+</details>
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
 
 ### Frontend
-- **Next.js 14**: Modern React framework with App Router
-- **React 18**: UI component library
-- **Tailwind CSS**: Utility-first styling
-- **Lucide React**: Beautiful icon library
-- **React Hot Toast**: Toast notifications
-- **Next Themes**: Dark mode support
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
-### Backend
-- **Next.js API Routes**: Serverless API endpoints
-- **Node.js**: JavaScript runtime
+### Backend & Database
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
 
-### Database
-- **PostgreSQL**: Reliable relational database
-- **Prisma ORM**: Type-safe database client with migrations
+### AI & Processing
+![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
 
-### AI & Document Processing
-- **OpenAI GPT-4**: Text summarization and analysis
-- **pdf-parse**: PDF text extraction
-- **mammoth**: Word document parsing
+### Authentication
+![NextAuth](https://img.shields.io/badge/NextAuth-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![Google](https://img.shields.io/badge/Google_OAuth-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub_OAuth-181717?style=for-the-badge&logo=github&logoColor=white)
 
-### Export & Integration
-- **jsPDF**: PDF generation
-- **docx**: Word document generation
-- **Marked**: Markdown parsing
-- **html2canvas**: HTML to image conversion
+</div>
 
-### Authentication & Security
-- **NextAuth.js**: Authentication and authorization
-- **bcryptjs**: Password hashing
-- **OAuth 2.0**: Google & GitHub integration
+---
 
-### Testing & Quality
-- **TypeScript**: Type safety
-- **ESLint**: Code linting
-- **Zod**: Schema validation
+## 🚀 Quick Start
 
-## 📋 Prerequisites
+### Prerequisites
 
-- Node.js 18+ and npm
-- PostgreSQL database
-- OpenAI API key (for GPT-4 summarization)
-- Google OAuth credentials (optional)
-- GitHub OAuth credentials (optional)
-
-## 🔧 Installation
-
-1. **Clone the repository**
 ```bash
-cd Short_Notes_App
+# Required
+Node.js 18+
+PostgreSQL 14+
+OpenAI API Key
+
+# Optional (for OAuth)
+Google OAuth Credentials
+GitHub OAuth Credentials
 ```
 
-2. **Install dependencies**
+### Installation
+
+<details>
+<summary><b>📦 Step 1: Clone and Install</b></summary>
+
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/short-notes.git
+cd short-notes
+
+# Install dependencies
 npm install
 ```
 
-3. **Set up environment variables**
+</details>
+
+<details>
+<summary><b>⚙️ Step 2: Environment Setup</b></summary>
+
 ```bash
+# Copy environment template
 cp .env.example .env.local
 ```
 
-Configure the following in `.env.local`:
+Configure your `.env.local`:
+
 ```env
-# Database
+# 🗄️ Database
 DATABASE_URL="postgresql://user:password@localhost:5432/short_notes_db"
 
-# NextAuth
+# 🔐 Authentication
 NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_SECRET="your-super-secret-key-min-32-chars"
 
-# OpenAI API
-OPENAI_API_KEY="sk-your-api-key"
+# 🤖 OpenAI API
+OPENAI_API_KEY="sk-your-openai-api-key"
 OPENAI_MODEL="gpt-4-turbo-preview"
 
-# OAuth (Optional)
-GOOGLE_CLIENT_ID="your-google-client-id"
+# 🔑 OAuth (Optional)
+GOOGLE_CLIENT_ID="your-google-client-id.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 GITHUB_CLIENT_ID="your-github-client-id"
 GITHUB_CLIENT_SECRET="your-github-client-secret"
 ```
 
-4. **Set up the database**
+</details>
+
+<details>
+<summary><b>🗃️ Step 3: Database Setup</b></summary>
+
 ```bash
-# Create a new PostgreSQL database
+# Create PostgreSQL database
 createdb short_notes_db
 
 # Run Prisma migrations
-npm run db:push
+npx prisma generate
+npx prisma db push
+
+# (Optional) Seed sample data
+npm run seed
 ```
 
-5. **Start the development server**
+</details>
+
+<details>
+<summary><b>▶️ Step 4: Launch</b></summary>
+
 ```bash
+# Start development server
 npm run dev
+
+# Open browser to
+# http://localhost:3000
 ```
 
-Visit `http://localhost:3000` in your browser.
+</details>
 
-## 🗂️ Project Structure
+---
 
+## 📖 Usage Guide
+
+### Creating Your First Note
+
+```bash
+1. 📤 Upload a Document
+   └─ Click "New Note" → Upload PDF/Word or paste text
+
+2. 🤖 AI Processing
+   └─ GPT-4 automatically generates title & bullet points
+
+3. ✏️ Edit & Organize
+   └─ Add tags, move to folders, customize as needed
+
+4. 💾 Auto-Save
+   └─ All changes saved automatically with version history
 ```
-Short_Notes_App/
-├── prisma/
-│   └── schema.prisma           # Database schema
-├── public/
-│   └── uploads/                # Temporary file storage
-├── src/
-│   ├── app/
-│   │   ├── api/                # API routes
-│   │   ├── (auth)/             # Authentication pages
-│   │   ├── dashboard/          # Main app pages
-│   │   ├── layout.tsx          # Root layout
-│   │   ├── page.tsx            # Home page
-│   │   └── globals.css         # Global styles
-│   ├── components/
-│   │   ├── ui/                 # UI components
-│   │   ├── dashboard/          # Dashboard components
-│   │   └── landing-page.tsx    # Landing page
-│   ├── lib/
-│   │   ├── auth.ts             # NextAuth configuration
-│   │   ├── prisma.ts           # Prisma client
-│   │   ├── openai.ts           # OpenAI integration
-│   │   ├── parsers/            # Document parsers
-│   │   ├── export/             # Export utilities
-│   │   ├── helpers.ts          # Helper functions
-│   │   └── utils.ts            # Utility functions
-│   └── types/
-│       └── index.ts            # TypeScript types
-├── next.config.js              # Next.js configuration
-├── tsconfig.json               # TypeScript configuration
-├── tailwind.config.js          # Tailwind CSS configuration
-├── postcss.config.js           # PostCSS configuration
-└── package.json                # Dependencies
-```
-
-## 📝 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register new user
-- `POST /api/auth/[...nextauth]` - NextAuth endpoint
-
-### Notes
-- `GET /api/notes` - Get all notes (paginated)
-- `POST /api/notes` - Create new note
-- `GET /api/notes/[id]` - Get specific note
-- `PUT /api/notes/[id]` - Update note
-- `DELETE /api/notes/[id]` - Delete note
-- `POST /api/notes/[id]/share` - Share note
-- `DELETE /api/notes/[id]/share` - Remove share
-- `GET /api/notes/[id]/export/[format]` - Export note
-
-### Files
-- `POST /api/upload` - Upload and process document
-
-### Folders
-- `GET /api/folders` - Get all folders
-- `POST /api/folders` - Create folder
-
-## 🎯 Usage Guide
-
-### Creating a Note
-
-1. Click **"New Note"** button in the dashboard
-2. Either:
-   - Upload a PDF/Word document
-   - Paste or type text
-3. The app will automatically:
-   - Extract text from documents
-   - Generate a title
-   - Create a summary
-   - Generate bullet points
 
 ### Organizing Notes
 
-1. Create folders to organize notes
-2. Move notes to folders
-3. Add tags for better categorization
-4. Use search to find notes quickly
+| Feature | Description | Shortcut |
+|---------|-------------|----------|
+| 📁 **Folders** | Create custom folders with colors | `Ctrl+Shift+N` |
+| 🏷️ **Tags** | Add multiple tags per note | `Ctrl+T` |
+| ⭐ **Favorites** | Star important notes | `Ctrl+D` |
+| 📌 **Pin** | Pin notes to top | `Ctrl+P` |
+| 🔍 **Search** | Full-text search | `Ctrl+K` |
 
 ### Exporting Notes
 
-1. Open a note
-2. Click the export button
-3. Choose format: PDF, Word, Markdown, HTML, or JSON
-4. Download the exported file
+<table>
+<tr>
+<td align="center">📄<br><b>PDF</b></td>
+<td align="center">📝<br><b>Word</b></td>
+<td align="center">📋<br><b>Markdown</b></td>
+<td align="center">🌐<br><b>HTML</b></td>
+<td align="center">📊<br><b>JSON</b></td>
+</tr>
+</table>
+
+```typescript
+// Export via API
+const response = await fetch(`/api/notes/${noteId}/export/pdf`);
+const blob = await response.blob();
+```
 
 ### Sharing Notes
 
-1. Open a note
-2. Click share button
-3. Toggle public/private
-4. Set permissions (view only or edit)
-5. Set expiration date (optional)
-6. Copy and share the link
+```bash
+🔗 Generate Link → Set Permissions → Share
+   ├─ 👁️ View Only (read-only access)
+   ├─ ✏️ Edit Access (full editing rights)
+   └─ ⏰ Expiration (optional time limit)
+```
+
+---
+
+## 🏗️ Project Structure
+
+```
+Short_Notes_App/
+├── 📂 prisma/
+│   └── schema.prisma              # Database schema & models
+├── 📂 public/
+│   └── uploads/                   # Temporary file storage
+├── 📂 src/
+│   ├── 📂 app/
+│   │   ├── 📂 api/                # API routes
+│   │   │   ├── auth/              # Authentication endpoints
+│   │   │   ├── notes/             # Note CRUD operations
+│   │   │   ├── folders/           # Folder management
+│   │   │   └── upload/            # File upload handler
+│   │   ├── 📂 (auth)/             # Auth pages (login, register)
+│   │   ├── 📂 dashboard/          # Main application
+│   │   │   ├── page.tsx           # Dashboard home
+│   │   │   ├── notes/             # Note pages
+│   │   │   └── settings/          # User settings
+│   │   ├── layout.tsx             # Root layout
+│   │   ├── page.tsx               # Landing page
+│   │   └── globals.css            # Global styles
+│   ├── 📂 components/
+│   │   ├── 📂 ui/                 # Reusable UI components
+│   │   ├── 📂 dashboard/          # Dashboard-specific components
+│   │   ├── 📂 editors/            # Note editor components
+│   │   └── landing-page.tsx       # Landing page component
+│   ├── 📂 lib/
+│   │   ├── auth.ts                # NextAuth configuration
+│   │   ├── prisma.ts              # Prisma client instance
+│   │   ├── openai.ts              # OpenAI integration
+│   │   ├── 📂 parsers/            # Document parsers
+│   │   │   ├── pdf.ts             # PDF parser
+│   │   │   └── docx.ts            # Word parser
+│   │   ├── 📂 export/             # Export utilities
+│   │   │   ├── pdf.ts             # PDF export
+│   │   │   ├── docx.ts            # Word export
+│   │   │   └── markdown.ts        # Markdown export
+│   │   ├── helpers.ts             # Helper functions
+│   │   └── utils.ts               # Utility functions
+│   └── 📂 types/
+│       └── index.ts               # TypeScript definitions
+├── 📄 next.config.js              # Next.js configuration
+├── 📄 tsconfig.json               # TypeScript config
+├── 📄 tailwind.config.js          # Tailwind CSS config
+├── 📄 postcss.config.js           # PostCSS config
+└── 📄 package.json                # Dependencies & scripts
+```
+
+---
+
+## 🔌 API Reference
+
+### Authentication
+
+```typescript
+// Register new user
+POST /api/auth/register
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "secure_password"
+}
+
+// Login (handled by NextAuth)
+POST /api/auth/signin
+```
+
+### Notes
+
+```typescript
+// Get all notes (paginated)
+GET /api/notes?page=1&limit=10&search=query&tag=important
+
+// Create note
+POST /api/notes
+{
+  "title": "Meeting Notes",
+  "content": "Bullet points...",
+  "folderId": "folder_id",
+  "tags": ["meeting", "work"]
+}
+
+// Get specific note
+GET /api/notes/[id]
+
+// Update note
+PUT /api/notes/[id]
+{
+  "title": "Updated Title",
+  "content": "Updated content..."
+}
+
+// Delete note
+DELETE /api/notes/[id]
+
+// Share note
+POST /api/notes/[id]/share
+{
+  "isPublic": true,
+  "canEdit": false,
+  "expiresAt": "2024-12-31T23:59:59Z"
+}
+
+// Export note
+GET /api/notes/[id]/export/[format]
+// formats: pdf, docx, markdown, html, json
+```
+
+### File Upload
+
+```typescript
+// Upload and process document
+POST /api/upload
+Content-Type: multipart/form-data
+{
+  file: File // PDF or DOCX
+}
+
+Response:
+{
+  "title": "Generated Title",
+  "content": "Extracted text...",
+  "summary": "AI-generated summary",
+  "bulletPoints": ["Point 1", "Point 2"]
+}
+```
+
+### Folders
+
+```typescript
+// Get all folders
+GET /api/folders
+
+// Create folder
+POST /api/folders
+{
+  "name": "Work Notes",
+  "color": "#3b82f6"
+}
+```
+
+---
 
 ## 🔐 Security Features
 
-- **Password Hashing**: bcryptjs for secure password storage
-- **Session Management**: JWT tokens with NextAuth.js
-- **CORS Protection**: Built-in Next.js protection
-- **SQL Injection Prevention**: Prisma parameterized queries
-- **XSS Protection**: React's built-in escaping
-- **Rate Limiting**: Implement on API routes as needed
+<table>
+<tr>
+<td width="50%">
+
+### 🛡️ Authentication
+- ✅ Password hashing (bcryptjs)
+- ✅ JWT session management
+- ✅ OAuth 2.0 (Google, GitHub)
+- ✅ Session expiration
+- ✅ CSRF protection
+
+</td>
+<td width="50%">
+
+### 🔒 Data Protection
+- ✅ SQL injection prevention (Prisma)
+- ✅ XSS protection (React escaping)
+- ✅ CORS protection (Next.js)
+- ✅ Rate limiting ready
+- ✅ Secure headers
+
+</td>
+</tr>
+</table>
+
+---
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
+### Deploy to Vercel (Recommended)
 
-1. Push code to GitHub
-2. Connect repository to Vercel
-3. Set environment variables in Vercel dashboard
-4. Deploy automatically on push
-
-### Docker
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/short-notes)
 
 ```bash
-# Build Docker image
+# 1. Push to GitHub
+git push origin main
+
+# 2. Import to Vercel
+# 3. Add environment variables
+# 4. Deploy! 🎉
+```
+
+### Docker Deployment
+
+```dockerfile
+# Build image
 docker build -t short-notes .
 
 # Run container
-docker run -p 3000:3000 short-notes
+docker run -p 3000:3000 \
+  -e DATABASE_URL="postgresql://..." \
+  -e NEXTAUTH_SECRET="..." \
+  -e OPENAI_API_KEY="..." \
+  short-notes
 ```
 
 ### Environment Variables for Production
 
 ```env
-DATABASE_URL="postgresql://prod-user:prod-password@prod-host/short_notes_db"
+# ⚠️ Update these for production
+DATABASE_URL="postgresql://prod-user:prod-pass@prod-host/db"
 NEXTAUTH_URL="https://yourdomain.com"
-NEXTAUTH_SECRET="generate-secure-secret"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
 OPENAI_API_KEY="sk-prod-api-key"
+NODE_ENV="production"
 ```
-
-## 📚 Advanced Features
-
-### Version History
-
-All note changes are automatically saved. Access version history to:
-- View previous versions
-- Compare versions
-- Restore old versions
-
-### Search
-
-Advanced search supports:
-- Full-text search across notes
-- Fuzzy matching for typos
-- Search by tags
-- Filter by date range
-
-### Collaboration
-
-- Share notes with custom permissions
-- View-only mode for shared notes
-- Optional edit permissions
-
-## 🐛 Troubleshooting
-
-### Database Connection Issues
-```bash
-# Check PostgreSQL is running
-psql -U postgres
-
-# Verify database exists
-psql -l | grep short_notes_db
-
-# Reset migrations
-npm run db:push
-```
-
-### OpenAI API Errors
-- Verify API key is valid
-- Check API quotas and rate limits
-- Ensure model name is correct
-
-### File Upload Issues
-- Check file size limits
-- Verify file format is supported
-- Check disk space
-
-## 📄 License
-
-MIT
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 📞 Support
-
-For issues and questions:
-1. Check existing GitHub issues
-2. Create a new issue with detailed description
-3. Include error logs and steps to reproduce
-
-## 🎓 Learning Resources
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Prisma Documentation](https://www.prisma.io/docs)
-- [NextAuth.js Guide](https://next-auth.js.org)
-- [OpenAI API Reference](https://platform.openai.com/docs)
-- [Tailwind CSS](https://tailwindcss.com/docs)
-
-## 🗺️ Roadmap
-
-- [ ] Real-time collaboration with WebSockets
-- [ ] Advanced AI features (auto-tagging, sentiment analysis)
-- [ ] Batch processing for multiple files
-- [ ] Custom summarization templates
-- [ ] Team collaboration features
-- [ ] Advanced analytics and insights
-- [ ] Mobile native apps (iOS/Android)
-- [ ] API for third-party integrations
-- [ ] Custom AI model training
-- [ ] Offline support with service workers
 
 ---
 
-Made with ❤️ for smarter note-taking
+## 🐛 Troubleshooting
+
+<details>
+<summary><b>Database Connection Issues</b></summary>
+
+```bash
+# Check PostgreSQL status
+sudo systemctl status postgresql
+
+# Test connection
+psql -U postgres -c "SELECT version();"
+
+# Reset database
+npx prisma db push --force-reset
+```
+
+</details>
+
+<details>
+<summary><b>OpenAI API Errors</b></summary>
+
+```bash
+# Test API key
+curl https://api.openai.com/v1/models \
+  -H "Authorization: Bearer $OPENAI_API_KEY"
+
+# Check rate limits
+# Visit: https://platform.openai.com/account/rate-limits
+```
+
+</details>
+
+<details>
+<summary><b>File Upload Issues</b></summary>
+
+```bash
+# Check disk space
+df -h
+
+# Verify upload directory permissions
+chmod 755 public/uploads
+
+# Check file size limits in next.config.js
+```
+
+</details>
+
+<details>
+<summary><b>Build Errors</b></summary>
+
+```bash
+# Clear cache and rebuild
+rm -rf .next node_modules
+npm install
+npm run build
+```
+
+</details>
+
+---
+
+## 📚 Documentation
+
+- 📖 [User Guide](docs/USER_GUIDE.md) - Complete usage documentation
+- 🛠️ [API Documentation](docs/API.md) - Full API reference
+- 🏗️ [Architecture](docs/ARCHITECTURE.md) - System design details
+- 🤝 [Contributing](CONTRIBUTING.md) - Contribution guidelines
+- 📝 [Changelog](CHANGELOG.md) - Version history
+
+---
+
+## 🗺️ Roadmap
+
+### 🎯 Version 2.0 (Q2 2024)
+
+- [ ] 🤝 Real-time collaboration with WebSockets
+- [ ] 🏷️ Auto-tagging with AI
+- [ ] 📊 Advanced analytics dashboard
+- [ ] 🎨 Custom summarization templates
+- [ ] 🌍 Multi-language support
+
+### 🚀 Version 3.0 (Q4 2024)
+
+- [ ] 📱 Mobile apps (iOS/Android)
+- [ ] 🔗 API for third-party integrations
+- [ ] 👥 Team workspaces
+- [ ] 📈 Usage insights & statistics
+- [ ] 🔌 Browser extension
+
+### 💡 Future Ideas
+
+- [ ] Voice-to-text notes
+- [ ] AI-powered search improvements
+- [ ] Custom AI model training
+- [ ] Offline support (PWA)
+- [ ] Integration with popular tools (Notion, Slack, etc.)
+
+[View Full Roadmap →](docs/ROADMAP.md)
+
+---
+
+## 🤝 Contributing
+
+We love contributions! 🎉
+
+<table>
+<tr>
+<td align="center">
+<b>🐛 Found a Bug?</b><br>
+<a href="https://github.com/yourusername/short-notes/issues">Report it</a>
+</td>
+<td align="center">
+<b>💡 Have an Idea?</b><br>
+<a href="https://github.com/yourusername/short-notes/issues">Suggest it</a>
+</td>
+<td align="center">
+<b>🔧 Want to Code?</b><br>
+<a href="CONTRIBUTING.md">Contribute</a>
+</td>
+</tr>
+</table>
+
+### Quick Contribution Guide
+
+```bash
+# 1. Fork the repository
+# 2. Create your feature branch
+git checkout -b feature/amazing-feature
+
+# 3. Commit your changes
+git commit -m '✨ Add amazing feature'
+
+# 4. Push to the branch
+git push origin feature/amazing-feature
+
+# 5. Open a Pull Request
+```
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before submitting PRs.
+
+---
+
+## 📊 Project Stats
+
+<div align="center">
+
+![GitHub stars](https://img.shields.io/github/stars/yourusername/short-notes?style=social)
+![GitHub forks](https://img.shields.io/github/forks/yourusername/short-notes?style=social)
+![GitHub issues](https://img.shields.io/github/issues/yourusername/short-notes)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/yourusername/short-notes)
+![GitHub contributors](https://img.shields.io/github/contributors/yourusername/short-notes)
+![GitHub last commit](https://img.shields.io/github/last-commit/yourusername/short-notes)
+
+</div>
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2024 Sadeesha Jay
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction...
+```
+
+---
+
+## 💖 Acknowledgments
+
+Built with love using:
+- [Next.js](https://nextjs.org/) - The React Framework
+- [OpenAI](https://openai.com/) - AI-powered summarization
+- [Prisma](https://www.prisma.io/) - Next-generation ORM
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
+- [NextAuth.js](https://next-auth.js.org/) - Authentication
+- [Vercel](https://vercel.com/) - Deployment platform
+
+Special thanks to all our [contributors](https://github.com/yourusername/short-notes/graphs/contributors)! 🙏
+
+---
+
+## 📞 Support & Community
+
+<div align="center">
+
+### Need Help?
+
+[![Discord](https://img.shields.io/badge/Discord-Join_Chat-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/shortnotes)
+[![Twitter](https://img.shields.io/badge/Twitter-Follow_Us-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/shortnotes)
+[![Email](https://img.shields.io/badge/Email-Contact_Us-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:support@shortnotes.com)
+
+### Show Your Support
+
+If you find Short Notes helpful, please consider:
+
+⭐ Starring the repo
+🐦 Sharing on Twitter
+💬 Joining our Discord
+☕ [Buy me a coffee](https://buymeacoffee.com/shortnotes)
+
+</div>
+
+---
+
+<div align="center">
+
+**[⬆ Back to Top](#-short-notes)**
+
+Made with ❤️ by [Sadeesha Jay](https://github.com/sadeeshajay)
+
+*Transform your note-taking workflow today!*
+
+</div>
