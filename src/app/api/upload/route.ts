@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get('file') as File;
     const folderId = formData.get('folderId') as string | null;
+    const template = formData.get('template') as string | undefined;
 
     if (!file) {
       return NextResponse.json(
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Summarize text
-    const summaryResult = await summarizeText(parsedDoc.text);
+    const summaryResult = await summarizeText(parsedDoc.text, template);
 
     // Generate title
     const title = await generateTitle(parsedDoc.text);
@@ -65,6 +66,17 @@ export async function POST(req: NextRequest) {
         folderId: folderId || undefined,
         sourceType: parsedDoc.sourceType,
         fileName: parsedDoc.fileName,
+        sentiment: summaryResult.sentiment,
+        tags: {
+          create: summaryResult.tags?.map((tagName) => ({
+            tag: {
+              connectOrCreate: {
+                where: { name: tagName },
+                create: { name: tagName },
+              },
+            },
+          })) || [],
+        },
       },
       include: { tags: { include: { tag: true } } },
     });

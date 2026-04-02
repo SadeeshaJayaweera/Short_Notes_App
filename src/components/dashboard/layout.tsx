@@ -17,6 +17,7 @@ import {
   Moon,
   Sun,
   Search,
+  BarChart,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Input } from '@/components/ui/input';
@@ -71,6 +72,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             label="Folders"
             icon={<Folder className="w-5 h-5" />}
             active={isActive('/dashboard/folders')}
+            collapsed={!sidebarOpen}
+          />
+          <NavItem
+            href="/dashboard/analytics"
+            label="Analytics"
+            icon={<BarChart className="w-5 h-5" />}
+            active={isActive('/dashboard/analytics')}
             collapsed={!sidebarOpen}
           />
         </nav>

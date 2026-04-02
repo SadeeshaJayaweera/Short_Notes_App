@@ -9,6 +9,8 @@ export interface ParsedDocument {
 export interface SummaryResult {
   summary: string;
   bulletPoints: string[];
+  tags: string[];
+  sentiment: string;
 }
 
 export interface Note {
@@ -25,6 +27,7 @@ export interface Note {
   isPinned: boolean;
   isFavorite: boolean;
   color?: string;
+  sentiment?: string;
   createdAt: Date;
   updatedAt: Date;
 }

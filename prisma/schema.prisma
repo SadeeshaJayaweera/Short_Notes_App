@@ -119,6 +119,7 @@ model Note {
   isPinned      Boolean  @default(false)
   isFavorite    Boolean  @default(false)
   color         String?  @default("white")
+  sentiment     String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 

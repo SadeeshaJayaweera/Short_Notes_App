@@ -16,6 +16,7 @@ export default function NewNotePage() {
   const [mode, setMode] = useState<'upload' | 'text'>('upload');
   const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState('');
+  const [template, setTemplate] = useState('Standard');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,11 +62,13 @@ export default function NewNotePage() {
           title: 'Untitled Note',
           originalText: text,
           sourceType: 'text',
+          template,
         });
       } else {
         // Upload file
         const formData = new FormData();
         formData.append('file', selectedFile!);
+        if (template) formData.append('template', template);
 
         noteData = await axios.post('/api/upload', formData, {
           headers: {
@@ -166,6 +169,23 @@ export default function NewNotePage() {
             />
           </div>
         )}
+
+        {/* Template Selection */}
+        <div className="space-y-4">
+          <label className="block text-sm font-medium">Summarization Template</label>
+          <select
+            value={template}
+            onChange={(e) => setTemplate(e.target.value)}
+            disabled={isLoading}
+            className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <option value="Standard">Standard</option>
+            <option value="Academic">Academic</option>
+            <option value="Business">Business</option>
+            <option value="Casual">Casual</option>
+            <option value="Technical">Technical</option>
+          </select>
+        </div>
 
         {/* Submit Button */}
         <div className="flex gap-4">
