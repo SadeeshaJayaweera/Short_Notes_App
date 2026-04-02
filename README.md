@@ -64,8 +64,9 @@ Enterprise-grade security with OAuth, JWT, and encrypted database storage
 
 - 🎯 **Smart Summarization** - GPT-4 powered bullet-point generation
 - 📝 **Auto Title Generation** - Intelligent titles based on content
-- 🏷️ **Auto-Tagging** (Coming Soon) - Automatic tag suggestions
-- 📊 **Sentiment Analysis** (Coming Soon) - Understand document tone
+- 🏷️ **Auto-Tagging** - Automatic AI-generated tag assignments
+- 📊 **Sentiment Analysis** - Understand document tone instantly
+- 🎨 **Custom Templates** - Choose summarization styles (Academic, Business, Casual, etc)
 
 </details>
 
@@ -78,6 +79,7 @@ Enterprise-grade security with OAuth, JWT, and encrypted database storage
 - 🔍 **Powerful Search** - Full-text search with fuzzy matching
 - ⭐ **Favorites & Pinning** - Quick access to important notes
 - 📜 **Version History** - Track changes and restore previous versions
+- 📈 **Analytics Dashboard** - Track your notes, metrics, top tags, and sentiment breakdown
 
 </details>
 
@@ -577,9 +579,9 @@ npm run build
 ### 🎯 Version 2.0 (Q2 2024)
 
 - [ ] 🤝 Real-time collaboration with WebSockets
-- [ ] 🏷️ Auto-tagging with AI
-- [ ] 📊 Advanced analytics dashboard
-- [ ] 🎨 Custom summarization templates
+- [x] 🏷️ Auto-tagging with AI
+- [x] 📊 Advanced analytics dashboard
+- [x] 🎨 Custom summarization templates
 - [ ] 🌍 Multi-language support
 
 ### 🚀 Version 3.0 (Q4 2024)
