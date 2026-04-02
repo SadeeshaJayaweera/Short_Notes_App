@@ -10,7 +10,7 @@ import {
 } from '@/lib/export';
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { id: string; format: string } }
 ) {
   try {
@@ -36,7 +36,6 @@ export async function GET(
       case 'pdf': {
         const blob = await exportNoteToPDF(
           note.title,
-          note.content,
           note.bulletPoints
         );
         return new NextResponse(blob, {

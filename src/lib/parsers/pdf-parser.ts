@@ -1,4 +1,4 @@
-import pdfParse from 'pdf-parse';
+const pdfParse = require('pdf-parse');
 import { ParsedDocument } from '@/types';
 
 export async function parsePDF(buffer: Buffer, fileName: string): Promise<ParsedDocument> {

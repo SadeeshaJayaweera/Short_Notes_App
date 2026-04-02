@@ -1,11 +1,8 @@
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { Document, Packer, Paragraph, HeadingLevel } from 'docx';
-import { marked } from 'marked';
 
 export async function exportNoteToPDF(
   title: string,
-  content: string,
   bulletPoints: string[]
 ): Promise<Blob> {
   try {
@@ -19,14 +16,14 @@ export async function exportNoteToPDF(
 
     // Add title
     doc.setFontSize(18);
-    doc.setFont(undefined, 'bold');
+    doc.setFont('helvetica', 'bold');
     const titleLines = doc.splitTextToSize(title, maxWidth);
     doc.text(titleLines, margin, yPos);
     yPos += titleLines.length * 7 + 5;
 
     // Add bullet points
     doc.setFontSize(11);
-    doc.setFont(undefined, 'normal');
+    doc.setFont('helvetica', 'normal');
 
     bulletPoints.forEach((point) => {
       const lines = doc.splitTextToSize(`• ${point}`, maxWidth - 5);
