@@ -20,12 +20,20 @@
 
 ## 📸 Application Preview
 <div align="center">
-  <p align="center"><b>Beautiful Modern UI - White Theme</b></p>
-  <img src="public/screenshots/landing_new.png" alt="Short Notes Landing Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+  <p align="center"><b>Beautiful Modern UI - White Theme Mockups</b></p>
   
-  <img src="public/screenshots/login_new.png" alt="Short Notes Login Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+  <p align="center"><i>Landing Page & Branding</i></p>
+  <img src="public/screenshots/mockup_landing.png" alt="Short Notes Landing Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
   
-  <img src="public/screenshots/register_new.png" alt="Short Notes Register Page Preview" width="800" style="border-radius: 8px; border: 1px solid #eaeaea;" />
+  <p align="center"><i>Secure Authentication</i></p>
+  <img src="public/screenshots/mockup_login.png" alt="Short Notes Login Page Preview" width="400" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+  <img src="public/screenshots/mockup_register.png" alt="Short Notes Register Page Preview" width="400" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+
+  <p align="center"><i>Personalized Dashboard (Sadeesha Jay)</i></p>
+  <img src="public/screenshots/mockup_dashboard.png" alt="Short Notes Dashboard Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+
+  <p align="center"><i>AI Generated Summaries</i></p>
+  <img src="public/screenshots/mockup_note.png" alt="Short Notes AI Summary Preview" width="800" style="border-radius: 8px; border: 1px solid #eaeaea;" />
 </div>
 
 ---
