@@ -18,6 +18,15 @@
 
 ---
 
+## 📸 Application Preview
+<div align="center">
+  <img src="public/screenshots/landing_page_actual.png" alt="Short Notes Landing Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px;" />
+  
+  <img src="public/screenshots/login_page_actual.png" alt="Short Notes Login Page Preview" width="800" style="border-radius: 8px;" />
+</div>
+
+---
+
 ## ✨ What Makes Short Notes Special?
 
 <table>
