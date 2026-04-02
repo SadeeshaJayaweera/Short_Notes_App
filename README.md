@@ -2,7 +2,7 @@
 
 # 📝 Short Notes
 
-### AI-Powered Note Taking That Actually Makes Sense
+### AI Powered Your Short Note Assistance
 
 *Transform lengthy documents into crystal-clear bullet points in seconds*
 
@@ -12,7 +12,7 @@
 [![Prisma](https://img.shields.io/badge/Prisma-5.0-2D3748)](https://www.prisma.io/)
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991)](https://openai.com/)
 
-[Live Demo](#) • [Documentation](#) • [Report Bug](https://github.com/yourusername/short-notes/issues) • [Request Feature](https://github.com/yourusername/short-notes/issues)
+[Live Demo](#) • [Documentation](#) • [Report Bug](https://github.com/SadeeshaJayaweera/Short_Notes_App/issues) • [Request Feature](https://github.com/SadeeshaJayaweera/Short_Notes_App/issues)
 
 </div>
 
@@ -20,9 +20,12 @@
 
 ## 📸 Application Preview
 <div align="center">
-  <img src="public/screenshots/landing_page_actual.png" alt="Short Notes Landing Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px;" />
+  <p align="center"><b>Beautiful Modern UI - White Theme</b></p>
+  <img src="public/screenshots/landing_new.png" alt="Short Notes Landing Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
   
-  <img src="public/screenshots/login_page_actual.png" alt="Short Notes Login Page Preview" width="800" style="border-radius: 8px;" />
+  <img src="public/screenshots/login_new.png" alt="Short Notes Login Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+  
+  <img src="public/screenshots/register_new.png" alt="Short Notes Register Page Preview" width="800" style="border-radius: 8px; border: 1px solid #eaeaea;" />
 </div>
 
 ---
