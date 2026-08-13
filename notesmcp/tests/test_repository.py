@@ -33,3 +33,20 @@ def test_get_note(db_session):
     
     # Not found
     assert repo.get("invalid_id") is None
+
+def test_update_note(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    created = repo.create("Old Title", "Old Content")
+    
+    updated = repo.update(
+        created.id,
+        title="New Title",
+        tags=["new_tag"],
+        is_pinned=True
+    )
+    
+    assert updated.title == "New Title"
+    assert "new_tag" in updated.tags
+    assert updated.is_pinned is True
+    # Ensure content wasn't overwritten by default
+    assert updated.content == "Old Content"
