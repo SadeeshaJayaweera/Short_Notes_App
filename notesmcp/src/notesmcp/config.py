@@ -17,9 +17,10 @@ if not DATABASE_URL:
 
 LOG_LEVEL = os.getenv("MCP_LOG_LEVEL", "INFO")
 
+
 def setup_logging() -> None:
     logging.basicConfig(
         level=getattr(logging, LOG_LEVEL.upper(), logging.INFO),
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
     logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
