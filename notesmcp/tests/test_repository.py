@@ -21,3 +21,15 @@ def test_create_note(db_session):
     assert db_note is not None
     assert db_note.title == "Test Note"
     assert db_note.userId == "test-user"
+
+def test_get_note(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    created_note = repo.create("To Get", "Content to get")
+    
+    fetched_note = repo.get(created_note.id)
+    assert fetched_note is not None
+    assert fetched_note.id == created_note.id
+    assert fetched_note.title == "To Get"
+    
+    # Not found
+    assert repo.get("invalid_id") is None
