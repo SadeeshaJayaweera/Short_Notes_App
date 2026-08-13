@@ -128,6 +128,76 @@ class NotesRepository:
             
         notes = query.order_by(Note.updatedAt.desc()).offset(offset).limit(limit).all()
         return [self._to_pydantic(note) for note in notes]
+
+    def add_tag(self, note_id: str, tag_name: str) -> Optional[NoteModel]:
+        """Atomically add a single tag to a note."""
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        if not db_note:
+            return None
+            
+        if not any(t.name == tag_name for t in db_note.tags):
+            tag = self.db.query(Tag).filter(Tag.name == tag_name).first()
+            if not tag:
+                tag = Tag(id=uuid.uuid4().hex, name=tag_name, createdAt=datetime.utcnow())
+                self.db.add(tag)
+            db_note.tags.append(tag)
+            db_note.updatedAt = datetime.utcnow()
+            self.db.commit()
+            self.db.refresh(db_note)
+            
+        return self._to_pydantic(db_note)
+
+    def remove_tag(self, note_id: str, tag_name: str) -> Optional[NoteModel]:
+        """Atomically remove a single tag from a note."""
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        if not db_note:
+            return None
+            
+        db_note.tags = [t for t in db_note.tags if t.name != tag_name]
+        db_note.updatedAt = datetime.utcnow()
+        self.db.commit()
+        self.db.refresh(db_note)
+        return self._to_pydantic(db_note)
+
+    def set_pinned(self, note_id: str, is_pinned: bool) -> Optional[NoteModel]:
+        """Atomically update the pinned status of a note."""
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        if not db_note:
+            return None
+            
+        if db_note.isPinned != is_pinned:
+            db_note.isPinned = is_pinned
+            db_note.updatedAt = datetime.utcnow()
+            self.db.commit()
+            self.db.refresh(db_note)
+        return self._to_pydantic(db_note)
+        
+    def summarize_note(self, note_id: str) -> Optional[NoteModel]:
+        """Generate a simple summary and auto-tag based on content keywords."""
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        if not db_note:
+            return None
+            
+        content = db_note.content or ""
+        keywords = {"urgent": "urgent", "todo": "todo", "meeting": "meeting", "idea": "idea", "bug": "bug"}
+        
+        added_tags = []
+        content_lower = content.lower()
+        for kw, tag_name in keywords.items():
+            if kw in content_lower and not any(t.name == tag_name for t in db_note.tags):
+                tag = self.db.query(Tag).filter(Tag.name == tag_name).first()
+                if not tag:
+                    tag = Tag(id=uuid.uuid4().hex, name=tag_name, createdAt=datetime.utcnow())
+                    self.db.add(tag)
+                db_note.tags.append(tag)
+                added_tags.append(tag_name)
+                
+        if added_tags:
+            db_note.updatedAt = datetime.utcnow()
+            self.db.commit()
+            self.db.refresh(db_note)
+            
+        return self._to_pydantic(db_note)
         
     def _to_pydantic(self, db_note: Note) -> NoteModel:
         return NoteModel(

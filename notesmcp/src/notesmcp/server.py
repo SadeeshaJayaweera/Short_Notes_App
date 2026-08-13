@@ -191,6 +191,25 @@ async def list_tools_handler(ctx, params: Optional[types.PaginatedRequestParams]
                     },
                     "required": ["note_id"]
                 }
+            ),
+            types.Tool(
+                name="summarize_note",
+                description="Summarize a note and auto-tag it based on keywords (e.g., urgent, todo).",
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "note_id": {"type": "string", "description": "The ID of the note"}
+                    },
+                    "required": ["note_id"]
+                }
+            ),
+            types.Tool(
+                name="export_notes",
+                description="Export all notes to a markdown formatted string.",
+                inputSchema={
+                    "type": "object",
+                    "properties": {}
+                }
             )
         ]
     )
@@ -272,7 +291,24 @@ async def call_tool_handler(ctx, params: types.CallToolRequestParams) -> types.C
             success = repo.restore(arguments["note_id"])
             if success:
                 return types.CallToolResult(content=[types.TextContent(type="text", text=f"Successfully restored note {arguments['note_id']}.")])
-            return types.CallToolResult(content=[types.TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found or not deleted.")], isError=True)
+            return types.CallToolResult(content=[types.TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found or not deleted.")], is_error=True)
+
+        elif name == "summarize_note":
+            note = repo.summarize_note(arguments["note_id"])
+            if not note:
+                return types.CallToolResult(content=[types.TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")], is_error=True)
+            return types.CallToolResult(content=[types.TextContent(type="text", text=f"Successfully summarized and auto-tagged note {note.id}.\nTags: {', '.join(note.tags)}")])
+            
+        elif name == "export_notes":
+            notes = repo.list(limit=1000)
+            md_lines = ["# Exported Notes\n"]
+            for n in notes:
+                md_lines.append(f"## {n.title}")
+                md_lines.append(f"**Tags:** {', '.join(n.tags)}")
+                md_lines.append(f"**Pinned:** {'Yes' if n.is_pinned else 'No'}")
+                md_lines.append(f"\n{n.content}\n---")
+            md_export = "\n".join(md_lines)
+            return types.CallToolResult(content=[types.TextContent(type="text", text=md_export)])
 
         else:
             raise ValueError(f"Unknown tool: {name}")
