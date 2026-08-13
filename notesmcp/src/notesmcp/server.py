@@ -62,6 +62,130 @@ async def read_resource(uri: str) -> str:
     finally:
         repo.db.close()
 
+@app.list_tools()
+async def list_tools() -> List[Tool]:
+    return [
+        Tool(
+            name="create_note",
+            description="Create a new note with title, content, and optional tags.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "The title of the note"},
+                    "content": {"type": "string", "description": "The main body content of the note (Markdown supported)"},
+                    "tags": {"type": "array", "items": {"type": "string"}, "description": "Optional tags to categorize the note"}
+                },
+                "required": ["title", "content"]
+            }
+        ),
+        Tool(
+            name="get_note",
+            description="Retrieve a single note by its unique ID.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The unique ID of the note"}
+                },
+                "required": ["note_id"]
+            }
+        ),
+        Tool(
+            name="update_note",
+            description="Update an existing note's title, content, tags, or pin status.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The unique ID of the note to update"},
+                    "title": {"type": "string", "description": "New title"},
+                    "content": {"type": "string", "description": "New content"},
+                    "tags": {"type": "array", "items": {"type": "string"}, "description": "New array of tags (overwrites existing)"},
+                    "is_pinned": {"type": "boolean", "description": "Whether the note is pinned"}
+                },
+                "required": ["note_id"]
+            }
+        ),
+        Tool(
+            name="delete_note",
+            description="Soft delete a note by its ID. Can be restored later.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The ID of the note to delete"}
+                },
+                "required": ["note_id"]
+            }
+        ),
+        Tool(
+            name="list_notes",
+            description="List notes with advanced filtering and pagination.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "limit": {"type": "integer", "description": "Max results to return", "default": 50},
+                    "offset": {"type": "integer", "description": "Pagination offset", "default": 0},
+                    "search": {"type": "string", "description": "Keyword search across title and content"},
+                    "tag": {"type": "string", "description": "Filter by a specific tag"},
+                    "is_pinned": {"type": "boolean", "description": "Filter by pinned status"}
+                }
+            }
+        )
+    ]
+
+@app.call_tool()
+async def call_tool(name: str, arguments: dict) -> List[TextContent]:
+    repo = get_repo()
+    try:
+        if name == "create_note":
+            note = repo.create(
+                title=arguments["title"],
+                content=arguments["content"],
+                tags=arguments.get("tags")
+            )
+            return [TextContent(type="text", text=f"Successfully created note '{note.title}' (ID: {note.id})")]
+            
+        elif name == "get_note":
+            note = repo.get(arguments["note_id"])
+            if not note:
+                return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")]
+            return [TextContent(type="text", text=json.dumps(note.model_dump(), default=str))]
+            
+        elif name == "update_note":
+            note = repo.update(
+                note_id=arguments["note_id"],
+                title=arguments.get("title"),
+                content=arguments.get("content"),
+                tags=arguments.get("tags"),
+                is_pinned=arguments.get("is_pinned")
+            )
+            if not note:
+                return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found or update failed.")]
+            return [TextContent(type="text", text=f"Successfully updated note {note.id}.")]
+            
+        elif name == "delete_note":
+            success = repo.delete(arguments["note_id"])
+            if success:
+                return [TextContent(type="text", text=f"Successfully deleted note {arguments['note_id']}.")]
+            return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")]
+            
+        elif name == "list_notes":
+            notes = repo.list(
+                limit=arguments.get("limit", 50),
+                offset=arguments.get("offset", 0),
+                search=arguments.get("search"),
+                tag=arguments.get("tag"),
+                is_pinned=arguments.get("is_pinned")
+            )
+            if not notes:
+                return [TextContent(type="text", text="No notes found matching the criteria.")]
+            return [TextContent(type="text", text=json.dumps([n.model_dump() for n in notes], default=str))]
+            
+        else:
+            raise ValueError(f"Unknown tool: {name}")
+    except Exception as e:
+        return [TextContent(type="text", text=f"Tool error: {str(e)}")]
+    finally:
+        repo.db.close()
+
 async def main():
     async with stdio_server() as (read_stream, write_stream):
         await app.run(read_stream, write_stream, app.create_initialization_options())
