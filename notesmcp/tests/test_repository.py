@@ -74,3 +74,44 @@ def test_list_notes(db_session):
     
     notes_page2 = repo.list(limit=2, offset=2)
     assert len(notes_page2) == 1
+
+def test_restore_note(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    created = repo.create("To Restore", "Restore me")
+    
+    repo.delete(created.id)
+    assert repo.get(created.id) is None
+    
+    assert repo.restore(created.id) is True
+    assert repo.get(created.id) is not None
+
+def test_search_notes(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    repo.create("Alpha Note", "Apple pie")
+    repo.create("Beta Note", "Banana split")
+    
+    # Search title
+    results = repo.list(search="Alpha")
+    assert len(results) == 1
+    assert results[0].title == "Alpha Note"
+    
+    # Search content
+    results = repo.list(search="Banana")
+    assert len(results) == 1
+    assert results[0].title == "Beta Note"
+
+def test_filter_notes(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    created1 = repo.create("Note A", "Content A", tags=["important"])
+    created2 = repo.create("Note B", "Content B", tags=["misc"])
+    repo.update(created1.id, is_pinned=True)
+    
+    # Filter by tag
+    tag_results = repo.list(tag="important")
+    assert len(tag_results) == 1
+    assert tag_results[0].title == "Note A"
+    
+    # Filter by pinned
+    pinned_results = repo.list(is_pinned=True)
+    assert len(pinned_results) == 1
+    assert pinned_results[0].title == "Note A"
