@@ -116,6 +116,17 @@ Enterprise-grade security with OAuth, JWT, and encrypted database storage
 </details>
 
 <details open>
+<summary><b>🔌 Model Context Protocol (MCP) Server</b></summary>
+<br>
+
+- 🧠 **Native AI Integration** - Claude Desktop can directly manage and interact with your notes
+- 🛠️ **Rich Toolset** - Summarize, auto-tag, export, and search your notes via LLM clients
+- ⚡ **Atomic Operations** - Contextually pin, tag, and restore notes right from AI chat
+- 🚀 **Python 3.11+ Backend** - Dedicated, high-performance local tool serving environment
+
+</details>
+
+<details open>
 <summary><b>🎨 User Experience</b></summary>
 <br>
 
@@ -146,6 +157,8 @@ Enterprise-grade security with OAuth, JWT, and encrypted database storage
 
 ### AI & Processing
 ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![MCP Server](https://img.shields.io/badge/MCP_Server-000000?style=for-the-badge)
 
 ### Authentication
 ![NextAuth](https://img.shields.io/badge/NextAuth-000000?style=for-the-badge&logo=next.js&logoColor=white)
@@ -587,6 +600,7 @@ npm run build
 ## 📚 Documentation
 
 - 📖 [User Guide](docs/USER_GUIDE.md) - Complete usage documentation
+- 🤖 [MCP Server Guide](notesmcp/README.md) - AI Desktop integration instructions
 - 🛠️ [API Documentation](docs/API.md) - Full API reference
 - 🏗️ [Architecture](docs/ARCHITECTURE.md) - System design details
 - 🤝 [Contributing](CONTRIBUTING.md) - Contribution guidelines
