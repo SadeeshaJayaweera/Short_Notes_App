@@ -45,16 +45,19 @@ class NotesRepository:
         
         return self._to_pydantic(db_note)
 
-    def get(self, note_id: str) -> Optional[NoteModel]:
+    def get(self, note_id: str, include_deleted: bool = False) -> Optional[NoteModel]:
         """Fetch a single note by ID."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id).first()
+        query = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id)
+        if not include_deleted:
+            query = query.filter(Note.deletedAt == None)
+        db_note = query.first()
         if not db_note:
             return None
         return self._to_pydantic(db_note)
 
     def update(self, note_id: str, title: Optional[str] = None, content: Optional[str] = None, tags: Optional[List[str]] = None, is_pinned: Optional[bool] = None) -> Optional[NoteModel]:
         """Update an existing note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
         if not db_note:
             return None
 
@@ -81,18 +84,49 @@ class NotesRepository:
         return self._to_pydantic(db_note)
 
     def delete(self, note_id: str) -> bool:
-        """Delete a note permanently (for now, as per schema)."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id).first()
+        """Soft delete a note."""
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
         if not db_note:
             return False
             
-        self.db.delete(db_note)
+        db_note.deletedAt = datetime.utcnow()
         self.db.commit()
         return True
 
-    def list(self, limit: int = 50, offset: int = 0) -> List[NoteModel]:
-        """List notes with pagination."""
-        notes = self.db.query(Note).filter(Note.userId == self.user_id).order_by(Note.updatedAt.desc()).offset(offset).limit(limit).all()
+    def restore(self, note_id: str) -> bool:
+        """Restore a soft-deleted note."""
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt != None).first()
+        if not db_note:
+            return False
+            
+        db_note.deletedAt = None
+        db_note.updatedAt = datetime.utcnow()
+        self.db.commit()
+        return True
+
+    def list(
+        self, 
+        limit: int = 50, 
+        offset: int = 0, 
+        search: Optional[str] = None,
+        tag: Optional[str] = None,
+        is_pinned: Optional[bool] = None
+    ) -> List[NoteModel]:
+        """List notes with advanced pagination, search, and filtering."""
+        query = self.db.query(Note).filter(Note.userId == self.user_id, Note.deletedAt == None)
+        
+        if search:
+            # Simple ILIKE search on title and content
+            search_term = f"%{search}%"
+            query = query.filter((Note.title.ilike(search_term)) | (Note.content.ilike(search_term)))
+            
+        if tag:
+            query = query.filter(Note.tags.any(Tag.name == tag))
+            
+        if is_pinned is not None:
+            query = query.filter(Note.isPinned == is_pinned)
+            
+        notes = query.order_by(Note.updatedAt.desc()).offset(offset).limit(limit).all()
         return [self._to_pydantic(note) for note in notes]
         
     def _to_pydantic(self, db_note: Note) -> NoteModel:
