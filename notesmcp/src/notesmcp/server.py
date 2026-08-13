@@ -128,6 +128,63 @@ async def list_tools() -> List[Tool]:
                     "is_pinned": {"type": "boolean", "description": "Filter by pinned status"}
                 }
             }
+        ),
+        Tool(
+            name="tag_note",
+            description="Add a specific tag to a note without overwriting others.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The ID of the note"},
+                    "tag": {"type": "string", "description": "The tag to add"}
+                },
+                "required": ["note_id", "tag"]
+            }
+        ),
+        Tool(
+            name="untag_note",
+            description="Remove a specific tag from a note.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The ID of the note"},
+                    "tag": {"type": "string", "description": "The tag to remove"}
+                },
+                "required": ["note_id", "tag"]
+            }
+        ),
+        Tool(
+            name="pin_note",
+            description="Pin a note to the top.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The ID of the note"}
+                },
+                "required": ["note_id"]
+            }
+        ),
+        Tool(
+            name="unpin_note",
+            description="Unpin a note.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The ID of the note"}
+                },
+                "required": ["note_id"]
+            }
+        ),
+        Tool(
+            name="restore_note",
+            description="Restore a soft-deleted note.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "note_id": {"type": "string", "description": "The ID of the note"}
+                },
+                "required": ["note_id"]
+            }
         )
     ]
 
@@ -179,6 +236,36 @@ async def call_tool(name: str, arguments: dict) -> List[TextContent]:
                 return [TextContent(type="text", text="No notes found matching the criteria.")]
             return [TextContent(type="text", text=json.dumps([n.model_dump() for n in notes], default=str))]
             
+        elif name == "tag_note":
+            note = repo.add_tag(arguments["note_id"], arguments["tag"])
+            if not note:
+                return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")]
+            return [TextContent(type="text", text=f"Successfully added tag '{arguments['tag']}' to note {note.id}.")]
+            
+        elif name == "untag_note":
+            note = repo.remove_tag(arguments["note_id"], arguments["tag"])
+            if not note:
+                return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")]
+            return [TextContent(type="text", text=f"Successfully removed tag '{arguments['tag']}' from note {note.id}.")]
+            
+        elif name == "pin_note":
+            note = repo.set_pinned(arguments["note_id"], True)
+            if not note:
+                return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")]
+            return [TextContent(type="text", text=f"Successfully pinned note {note.id}.")]
+            
+        elif name == "unpin_note":
+            note = repo.set_pinned(arguments["note_id"], False)
+            if not note:
+                return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found.")]
+            return [TextContent(type="text", text=f"Successfully unpinned note {note.id}.")]
+
+        elif name == "restore_note":
+            success = repo.restore(arguments["note_id"])
+            if success:
+                return [TextContent(type="text", text=f"Successfully restored note {arguments['note_id']}.")]
+            return [TextContent(type="text", text=f"Error: Note {arguments['note_id']} not found or not deleted.")]
+
         else:
             raise ValueError(f"Unknown tool: {name}")
     except Exception as e:
