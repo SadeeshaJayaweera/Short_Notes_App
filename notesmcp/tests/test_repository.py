@@ -50,3 +50,27 @@ def test_update_note(db_session):
     assert updated.is_pinned is True
     # Ensure content wasn't overwritten by default
     assert updated.content == "Old Content"
+
+def test_delete_note(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    created = repo.create("To Delete", "Delete me")
+    
+    # Delete it
+    assert repo.delete(created.id) is True
+    # Verify it's gone
+    assert repo.get(created.id) is None
+    # Try deleting again
+    assert repo.delete(created.id) is False
+
+def test_list_notes(db_session):
+    repo = NotesRepository(db=db_session, user_id="test-user")
+    
+    # Create 3 notes
+    for i in range(3):
+        repo.create(f"Note {i}", f"Content {i}")
+        
+    notes = repo.list(limit=2, offset=0)
+    assert len(notes) == 2
+    
+    notes_page2 = repo.list(limit=2, offset=2)
+    assert len(notes_page2) == 1
