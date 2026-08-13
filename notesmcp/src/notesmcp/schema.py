@@ -40,5 +40,6 @@ class Note(Base):
     sentiment = Column(String, nullable=True)
     createdAt = Column(DateTime)
     updatedAt = Column(DateTime)
+    deletedAt = Column(DateTime, nullable=True)
 
     tags = relationship('Tag', secondary=note_tags, back_populates='notes')
