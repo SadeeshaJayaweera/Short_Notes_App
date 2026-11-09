@@ -1,12 +1,12 @@
-from typing import List, Optional
+import uuid
 from datetime import datetime
+from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
-from notesmcp.schema import Note, Tag
 from notesmcp.models import Note as NoteModel
+from notesmcp.schema import Note, Tag
 
-import uuid
 
 class NotesRepository:
     def __init__(self, db: Session, user_id: str):
@@ -49,7 +49,7 @@ class NotesRepository:
         """Fetch a single note by ID."""
         query = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id)
         if not include_deleted:
-            query = query.filter(Note.deletedAt == None)
+            query = query.filter(Note.deletedAt.is_(None))
         db_note = query.first()
         if not db_note:
             return None
@@ -57,7 +57,7 @@ class NotesRepository:
 
     def update(self, note_id: str, title: Optional[str] = None, content: Optional[str] = None, tags: Optional[List[str]] = None, is_pinned: Optional[bool] = None) -> Optional[NoteModel]:
         """Update an existing note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_(None)).first()
         if not db_note:
             return None
 
@@ -85,7 +85,7 @@ class NotesRepository:
 
     def delete(self, note_id: str) -> bool:
         """Soft delete a note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_(None)).first()
         if not db_note:
             return False
             
@@ -95,7 +95,7 @@ class NotesRepository:
 
     def restore(self, note_id: str) -> bool:
         """Restore a soft-deleted note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt != None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_not(None)).first()
         if not db_note:
             return False
             
@@ -113,7 +113,7 @@ class NotesRepository:
         is_pinned: Optional[bool] = None
     ) -> List[NoteModel]:
         """List notes with advanced pagination, search, and filtering."""
-        query = self.db.query(Note).filter(Note.userId == self.user_id, Note.deletedAt == None)
+        query = self.db.query(Note).filter(Note.userId == self.user_id, Note.deletedAt.is_(None))
         
         if search:
             # Simple ILIKE search on title and content
@@ -131,7 +131,7 @@ class NotesRepository:
 
     def add_tag(self, note_id: str, tag_name: str) -> Optional[NoteModel]:
         """Atomically add a single tag to a note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_(None)).first()
         if not db_note:
             return None
             
@@ -149,7 +149,7 @@ class NotesRepository:
 
     def remove_tag(self, note_id: str, tag_name: str) -> Optional[NoteModel]:
         """Atomically remove a single tag from a note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_(None)).first()
         if not db_note:
             return None
             
@@ -161,7 +161,7 @@ class NotesRepository:
 
     def set_pinned(self, note_id: str, is_pinned: bool) -> Optional[NoteModel]:
         """Atomically update the pinned status of a note."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_(None)).first()
         if not db_note:
             return None
             
@@ -174,7 +174,7 @@ class NotesRepository:
         
     def summarize_note(self, note_id: str) -> Optional[NoteModel]:
         """Generate a simple summary and auto-tag based on content keywords."""
-        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt == None).first()
+        db_note = self.db.query(Note).filter(Note.id == note_id, Note.userId == self.user_id, Note.deletedAt.is_(None)).first()
         if not db_note:
             return None
             

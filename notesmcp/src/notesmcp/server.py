@@ -1,19 +1,17 @@
 import asyncio
-from typing import Any, List, Optional
-import json
-
-from mcp.server import Server
-from mcp.server.stdio import stdio_server
-import mcp.types as types
-from pydantic import BaseModel, Field, ValidationError
-
 import hashlib
+import json
 import logging
 import os
+from typing import Optional
 
+import mcp.types as types
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+
+from notesmcp.config import setup_logging
 from notesmcp.db import SessionLocal
 from notesmcp.repository import NotesRepository
-from notesmcp.config import setup_logging
 from notesmcp.schema import ApiKey
 
 setup_logging()
