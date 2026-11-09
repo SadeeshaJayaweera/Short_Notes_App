@@ -1,20 +1,25 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
+export const viewport: Viewport = {
+  themeColor: "#6366f1",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: "Short Notes — AI-Powered Second Brain",
   description: "Personal AI-powered knowledge management: Capture, Understand, Connect, Recall, and Act.",
   manifest: "/manifest.json",
-  themeColor: "#6366f1",
   icons: {
     icon: "/icon.svg",
     apple: "/icon.svg",
   },
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({
