@@ -26,6 +26,9 @@ model User {
   accounts        Account[]
   aiConversations AIConversation[]
   tasks           Task[]
+  flashcards      Flashcard[]
+  quizzes         Quiz[]
+  apiKeys         ApiKey[]
 
   @@map("users")
 }
@@ -145,6 +148,8 @@ model Note {
   chunks               DocumentChunk[]
   sourceReferences     AISourceReference[]
   tasks                Task[]
+  flashcards           Flashcard[]
+  quizzes              Quiz[]
 
   @@index([userId])
   @@index([folderId])
@@ -280,4 +285,81 @@ model Task {
   @@index([userId, status])
   @@index([noteId])
   @@map("tasks")
+}
+
+model Flashcard {
+  id             String    @id @default(cuid())
+  userId         String
+  noteId         String?
+  deckName       String    @default("Default")
+  front          String    @db.Text
+  back           String    @db.Text
+  easeFactor     Float     @default(2.5) // SuperMemo SM-2 ease factor
+  interval       Int       @default(0)   // Review interval in days
+  repetitions    Int       @default(0)   // Successful consecutive reviews
+  dueDate        DateTime  @default(now())
+  lastReviewedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note Note? @relation(fields: [noteId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([userId, dueDate])
+  @@index([noteId])
+  @@map("flashcards")
+}
+
+model Quiz {
+  id          String         @id @default(cuid())
+  userId      String
+  noteId      String?
+  title       String
+  description String?        @db.Text
+  score       Float?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note      Note?          @relation(fields: [noteId], references: [id], onDelete: SetNull)
+  questions QuizQuestion[]
+
+  @@index([userId])
+  @@index([noteId])
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id            String   @id @default(cuid())
+  quizId        String
+  question      String   @db.Text
+  options       String[] @db.Text
+  correctAnswer Int
+  explanation   String?  @db.Text
+  userAnswer    Int?
+  createdAt     DateTime @default(now())
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([quizId])
+  @@map("quiz_questions")
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  userId      String
+  name        String
+  keyHash     String    @unique
+  prefix      String    // e.g. "sk_live_a1b2c3"
+  permissions String[]  @default(["read", "write"])
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([keyHash])
+  @@map("api_keys")
 }

@@ -6,9 +6,15 @@ import { Providers } from "@/components/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Short Notes - AI-Powered Note Taking",
-  description: "Convert long documents into concise bullet-point summaries using AI",
-  viewport: "width=device-width, initial-scale=1",
+  title: "Short Notes — AI-Powered Second Brain",
+  description: "Personal AI-powered knowledge management: Capture, Understand, Connect, Recall, and Act.",
+  manifest: "/manifest.json",
+  themeColor: "#6366f1",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
 };
 
 export default function RootLayout({
@@ -18,8 +24,24 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+      </head>
       <body className={inter.className}>
         <Providers>{children}</Providers>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js').catch(function() {});
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

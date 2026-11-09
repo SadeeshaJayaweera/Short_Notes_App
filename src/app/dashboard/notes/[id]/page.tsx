@@ -25,6 +25,7 @@ import {
   Plus,
   X,
   FileDown,
+  GraduationCap,
 } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
@@ -389,6 +390,14 @@ export default function NoteDetailPage({ params }: { params: { id: string } }) {
             <Share2 className="w-3.5 h-3.5" />
             Share
           </Button>
+
+          {/* Study / Flashcards */}
+          <Link href="/dashboard/study">
+            <Button variant="outline" size="sm" className="gap-1.5 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-900/60">
+              <GraduationCap className="w-3.5 h-3.5" />
+              Study
+            </Button>
+          </Link>
 
           {/* Export Dropdown */}
           <div className="relative group">

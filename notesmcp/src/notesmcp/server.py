@@ -7,18 +7,41 @@ from mcp.server.stdio import stdio_server
 import mcp.types as types
 from pydantic import BaseModel, Field, ValidationError
 
+import hashlib
+import logging
+import os
+
 from notesmcp.db import SessionLocal
 from notesmcp.repository import NotesRepository
 from notesmcp.config import setup_logging
+from notesmcp.schema import ApiKey
 
 setup_logging()
+auth_logger = logging.getLogger("notesmcp.auth")
 
-# In a real app, this might come from auth context. For now, default user.
 DEFAULT_USER_ID = "mcp-client-user"
+
+def resolve_authenticated_user(db) -> str:
+    """Resolve the authorized user ID via API key or environment configuration."""
+    api_key = os.getenv("SHORT_NOTES_API_KEY") or os.getenv("NOTES_MCP_API_KEY")
+    if api_key:
+        key_hash = hashlib.sha256(api_key.strip().encode()).hexdigest()
+        key_record = db.query(ApiKey).filter(ApiKey.keyHash == key_hash).first()
+        if key_record:
+            auth_logger.info("Authenticated MCP client via API key %s...", key_record.prefix)
+            return key_record.userId
+        auth_logger.warning("Provided SHORT_NOTES_API_KEY is invalid or revoked.")
+
+    explicit_user_id = os.getenv("SHORT_NOTES_USER_ID") or os.getenv("NOTES_USER_ID")
+    if explicit_user_id:
+        return explicit_user_id
+
+    return DEFAULT_USER_ID
 
 def get_repo() -> NotesRepository:
     db = SessionLocal()
-    return NotesRepository(db, DEFAULT_USER_ID)
+    user_id = resolve_authenticated_user(db)
+    return NotesRepository(db, user_id)
 
 async def list_resources_handler(ctx, params: Optional[types.PaginatedRequestParams] = None) -> types.ListResourcesResult:
     return types.ListResourcesResult(

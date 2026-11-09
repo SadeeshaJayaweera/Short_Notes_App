@@ -43,3 +43,15 @@ class Note(Base):
     deletedAt = Column(DateTime, nullable=True)
 
     tags = relationship('Tag', secondary=note_tags, back_populates='notes')
+
+class ApiKey(Base):
+    __tablename__ = 'api_keys'
+
+    id = Column(String, primary_key=True)
+    userId = Column(String, nullable=False)
+    name = Column(String, nullable=False)
+    keyHash = Column(String, unique=True, nullable=False)
+    prefix = Column(String, nullable=False)
+    createdAt = Column(DateTime)
+    lastUsedAt = Column(DateTime, nullable=True)
+    expiresAt = Column(DateTime, nullable=True)

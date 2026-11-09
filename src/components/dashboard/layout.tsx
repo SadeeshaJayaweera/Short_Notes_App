@@ -22,6 +22,8 @@ import {
   Sparkles,
   Share2,
   CheckSquare,
+  GraduationCap,
+  WifiOff,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Input } from '@/components/ui/input';
@@ -32,6 +34,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [mounted, setMounted] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [headerSearch, setHeaderSearch] = useState('');
+  const [isOffline, setIsOffline] = useState(false);
   const { theme, setTheme } = useTheme();
   const { data: session } = useSession();
   const pathname = usePathname();
@@ -39,6 +42,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     setMounted(true);
+    setIsOffline(!navigator.onLine);
+
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -48,7 +58,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
   }, []);
 
   const isActive = (path: string) => pathname === path;
@@ -121,6 +135,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             label="Tasks"
             icon={<CheckSquare className="w-4 h-4 text-emerald-400" />}
             active={isActive('/dashboard/tasks')}
+            collapsed={!sidebarOpen}
+          />
+          <NavItem
+            href="/dashboard/study"
+            label="Study Mode"
+            icon={<GraduationCap className="w-4 h-4 text-indigo-400" />}
+            active={isActive('/dashboard/study')}
             collapsed={!sidebarOpen}
           />
           <NavItem
@@ -259,6 +280,19 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto p-6 sm:p-8">
+          {isOffline && (
+            <div className="mb-6 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs flex items-center justify-between shadow-xs">
+              <div className="flex items-center gap-2">
+                <WifiOff className="w-4 h-4 shrink-0" />
+                <span>
+                  <strong>Offline Mode:</strong> You are currently disconnected. Cached notes and read operations remain accessible.
+                </span>
+              </div>
+              <span className="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-amber-500/20">
+                PWA Offline
+              </span>
+            </div>
+          )}
           {children}
         </main>
       </div>

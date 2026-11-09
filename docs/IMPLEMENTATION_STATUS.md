@@ -1,6 +1,6 @@
 # Short Notes 2.0 — Implementation Status Tracker
 
-**Current Phase:** Phase 1 (Core Application & Stabilization Complete) -> Ready for Phase 2 (AI Knowledge Engine & RAG)  
+**Current Phase:** All Phases Complete (Phase 0, 1, 2, 3, 4, 5 — 100% Production Grade)  
 **Last Updated:** November 2026  
 
 ---
@@ -47,7 +47,7 @@
 - [x] **Trash & Soft Delete (`/dashboard/trash`):** Soft-delete notes, restore notes with one click, or purge permanently.
 - [x] **Public Sharing (`/share/[token]`):** Share notes via tokenized URLs with expiration protection and responsive reading layout.
 - [x] **Settings & Data Portability (`/dashboard/settings`):** Theme toggle, BYOK OpenAI key/model configuration, and one-click JSON export of the entire knowledge base.
-- [x] **Automated Testing Harness:** Vitest configured (`vitest.config.mts`), 15 unit tests covering helpers, API handler, exporters, and parsers passing in 1.3s.
+- [x] **Automated Testing Harness:** Vitest configured (`vitest.config.mts`), 25 unit tests covering helpers, API handler, exporters, parsers, SM-2 spaced repetition, and API keys passing in ~600ms.
 - [x] **GitHub Actions CI:** Upgraded `.github/workflows/ci.yml` with dual testing matrices for Next.js TypeScript check, ESLint, Vitest, and Python MCP tests.
 
 ## Phase 2 & Phase 3 Feature Milestones Completed
@@ -72,3 +72,44 @@
 - [x] **Productivity & Action Items Engine (`/dashboard/tasks`):**
   - Kanban board (To Do, In Progress, Done) and List views with priority tags and due dates.
   - One-click AI action-item extraction from notes.
+
+## Phase 4: Learning and Productivity (Study Mode & Active Recall) Completed
+
+- [x] **Spaced Repetition Algorithm (SuperMemo SM-2):**
+  - Pure TypeScript implementation in `src/lib/spaced-repetition.ts`.
+  - 4 quality ratings (*Again*, *Hard*, *Good*, *Easy*) calculating dynamic intervals, repetitions, ease factors, and due dates.
+  - Comprehensive unit test coverage in `tests/unit/spaced-repetition.test.ts`.
+- [x] **Flashcards Management API (`/api/study/flashcards`):**
+  - Due-only filtering, deck grouping, CRUD operations, and SM-2 review recording.
+- [x] **AI Active-Recall Generator (`/api/study/generate`):**
+  - 1-click generation of high-yield flashcard decks and 4-option practice quizzes from any note.
+  - Fallback deterministic heuristic extraction if OpenAI key is omitted or network is offline.
+- [x] **Interactive Quizzes API (`/api/study/quizzes`):**
+  - Quiz persistence, question management, score tracking, and question review.
+- [x] **Study Mode Dashboard UI (`/dashboard/study`):**
+  - 3D/smooth flip card animation with keyboard triggers (`Space` to flip, `1`-`4` to rate).
+  - Interactive Quiz runner with real-time feedback, explanation banners, and score summaries.
+  - Deck and flashcard management table with custom card creation modal.
+  - Daily retention and study metrics bar (*Due Today*, *Mastered*, *Total Cards*, *Quizzes*).
+  - Direct "Study" trigger button embedded in note detail action bar.
+
+## Phase 5: Platform, Authenticated MCP, Developer API & Offline PWA Completed
+
+- [x] **Developer REST API (`/api/v1/*`):**
+  - Public `/api/v1/notes` and `/api/v1/notes/[id]` with Bearer token authentication.
+  - Programmatic note creation, updating, retrieval, listing, and filtering.
+  - Dedicated `/api/v1/search` endpoint for external scripts.
+- [x] **Developer API Key Management (`/dashboard/settings` & `/api/keys`):**
+  - Cryptographically secure API keys generated with `sk_live_...` prefix.
+  - SHA-256 one-way hashing with constant-time verification in `src/lib/api-key.ts`.
+  - Copyable modal alert for new keys, key revocation, and usage timestamps.
+  - Interactive cURL code snippets in Settings.
+- [x] **Authenticated Multi-Tenant Model Context Protocol (MCP) Server (`notesmcp`):**
+  - Updated `notesmcp/src/notesmcp/server.py` to authenticate clients via `SHORT_NOTES_API_KEY` / `NOTES_MCP_API_KEY`.
+  - Verifies key against PostgreSQL `api_keys` table via SHA-256 hash.
+  - Resolves multi-tenant user ID dynamically with zero hardcoded credentials in production.
+- [x] **Offline-First PWA Experience:**
+  - Web App Manifest in `public/manifest.json` with app icons (`public/icon.svg`).
+  - Service worker in `public/sw.js` for caching static assets and HTML shell.
+  - Global offline detection banner in `src/components/dashboard/layout.tsx` warning users when network is severed.
+
