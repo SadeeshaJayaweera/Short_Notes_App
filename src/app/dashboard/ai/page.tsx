@@ -92,6 +92,13 @@ export default function AiAssistantPage() {
 
   useEffect(() => {
     fetchConversations();
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q') || params.get('prompt');
+      if (q) {
+        setInputPrompt(q);
+      }
+    }
   }, []);
 
   useEffect(() => {
