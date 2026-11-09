@@ -59,3 +59,4 @@ export async function GET(req: NextRequest) {
     return errorResponse('Search failed', 500);
   }
 }
+

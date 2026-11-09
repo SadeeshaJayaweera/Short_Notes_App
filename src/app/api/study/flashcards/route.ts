@@ -188,3 +188,4 @@ export async function DELETE(req: NextRequest) {
     return errorResponse('Failed to delete flashcard', 500);
   }
 }
+

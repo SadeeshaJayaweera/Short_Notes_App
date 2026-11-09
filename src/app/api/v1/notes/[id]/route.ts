@@ -123,3 +123,4 @@ export async function DELETE(
     return errorResponse('Failed to delete note', 500);
   }
 }
+

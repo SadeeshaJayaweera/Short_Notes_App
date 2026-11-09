@@ -115,3 +115,4 @@ export async function DELETE(req: NextRequest) {
     return errorResponse('Failed to delete quiz', 500);
   }
 }
+

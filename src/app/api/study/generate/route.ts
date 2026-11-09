@@ -242,3 +242,4 @@ Respond ONLY with valid JSON conforming to this exact TypeScript shape:
     return errorResponse('Failed to generate study materials', 500);
   }
 }
+

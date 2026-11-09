@@ -95,3 +95,4 @@ describe('Spaced Repetition (SM-2) Engine', () => {
     expect(state.easeFactor).toBe(MIN_EASE_FACTOR);
   });
 });
+
