@@ -19,7 +19,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
   }
 
   if (!session) {
-    redirect('/auth/login');
+    redirect('/login');
   }
 
   return <DashboardLayout>{children}</DashboardLayout>;

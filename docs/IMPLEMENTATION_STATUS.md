@@ -1,0 +1,74 @@
+# Short Notes 2.0 — Implementation Status Tracker
+
+**Current Phase:** Phase 1 (Core Application & Stabilization Complete) -> Ready for Phase 2 (AI Knowledge Engine & RAG)  
+**Last Updated:** November 2026  
+
+---
+
+## Deliverables Status
+
+### Initial Mandatory Deliverables (Section 1 & 30)
+- [x] Complete repository audit: `docs/PROJECT_AUDIT.md`
+- [x] Existing feature verification matrix: `docs/FEATURE_MATRIX.md`
+- [x] Critical bug and security report: `docs/SECURITY_AUDIT.md`
+- [x] Product Requirements Document: `docs/PRODUCT_REQUIREMENTS.md`
+- [x] Proposed system architecture: `docs/SYSTEM_ARCHITECTURE.md`
+- [x] Database design & entity dictionary: `docs/DATABASE_DESIGN.md`
+- [x] Database migration runbook: `docs/DATABASE_MIGRATIONS.md`
+- [x] Comprehensive testing strategy: `docs/TESTING_STRATEGY.md`
+- [x] Prioritized implementation roadmap: `docs/IMPLEMENTATION_ROADMAP.md`
+- [x] Production deployment guide: `docs/DEPLOYMENT_GUIDE.md`
+
+---
+
+## Bug Remediation Status
+
+| ID | Issue | Target Phase | Status | Resolution |
+|---|---|---|---|---|
+| SEC-01 | `.gitignore` missing `.env*` and `.next/` | Phase 0 | **Fixed** | Updated `.gitignore` with strict environment variable rules. |
+| BUG-01 | Unauthenticated redirect to `/auth/login` (404) | Phase 1 | **Fixed** | Fixed redirect in `src/app/dashboard/layout.tsx` to `/login`. |
+| BUG-02 | Notes list crashes on undefined `response.data.notes` | Phase 1 | **Fixed** | Rewrote `src/app/dashboard/notes/page.tsx` with safe response payload unwrapping. |
+| BUG-03 | Missing note editor / detail route `/dashboard/notes/[id]` (404) | Phase 1 | **Fixed** | Implemented full Markdown/Rich editor, autosave, AI assistant tools, and version history. |
+| BUG-04 | Missing `/dashboard/folders` and `/dashboard/settings` (404) | Phase 1 | **Fixed** | Built complete Folders management page and user Settings page (BYOK AI, export, theme). |
+| BUG-05 | Synchronous OpenAI call fails note creation when offline | Phase 1 | **Fixed** | Decoupled manual note creation from mandatory OpenAI calls in `/api/notes`; added graceful fallback. |
+| BUG-06 | Missing public note share route `/share/[token]` (404) | Phase 1 | **Fixed** | Created public API route `/api/share/[token]` and public responsive view `/share/[token]`. |
+| BUG-07 | Missing folder update (`PUT`) and delete (`DELETE`) API | Phase 1 | **Fixed** | Implemented `PUT` and `DELETE` endpoints in `src/app/api/folders/route.ts`. |
+| BUG-08 | Hard delete instead of soft delete in `DELETE /api/notes/[id]` | Phase 1 | **Fixed** | Soft deletion via `deletedAt` implemented; permanent delete flag supported; Trash view created (`/dashboard/trash`). |
+| BUG-09 | Header search input is completely dead | Phase 1 | **Fixed** | Wired search form in `DashboardLayout` to navigate to `/dashboard/notes?search=...`. |
+| BUG-10 | Dead duplicate file `src/app/dashboard/notes/page-improved.tsx` | Phase 1 | **Fixed** | Removed dead file; unified all enhancements cleanly into `page.tsx`. |
+
+---
+
+## Phase 1 Feature Milestones Completed
+
+- [x] **Personalized Dashboard Home (`/dashboard`):** Real-time stats (Total Notes, Folders, Pinned, Favorites), instant Quick Capture widget, pinned shelf, and recent notes feed.
+- [x] **Distraction-Free Note Editor (`/dashboard/notes/[id]`):** Live Markdown write/preview, debounced autosave with status badges (*Saved*, *Saving*, *Unsaved*), word/time stats, on-demand AI assist (Summary, Improve, Title).
+- [x] **Folders System (`/dashboard/folders`):** Create with custom colors, rename, recolor, delete (safely detaching notes), and view notes per folder.
+- [x] **Trash & Soft Delete (`/dashboard/trash`):** Soft-delete notes, restore notes with one click, or purge permanently.
+- [x] **Public Sharing (`/share/[token]`):** Share notes via tokenized URLs with expiration protection and responsive reading layout.
+- [x] **Settings & Data Portability (`/dashboard/settings`):** Theme toggle, BYOK OpenAI key/model configuration, and one-click JSON export of the entire knowledge base.
+- [x] **Automated Testing Harness:** Vitest configured (`vitest.config.mts`), 15 unit tests covering helpers, API handler, exporters, and parsers passing in 1.3s.
+- [x] **GitHub Actions CI:** Upgraded `.github/workflows/ci.yml` with dual testing matrices for Next.js TypeScript check, ESLint, Vitest, and Python MCP tests.
+
+## Phase 2 & Phase 3 Feature Milestones Completed
+
+- [x] **Database Schema Evolution:** Added `NoteRelationship`, `AIConversation`, `AIMessage`, `AISourceReference`, `DocumentChunk`, `Task`, hierarchical `Folder`, and enhanced `Note` metadata without data loss.
+- [x] **Interactive Knowledge Graph (`/dashboard/graph`):**
+  - Full-canvas visual graph network representing notes, bi-directional links, internal `[[Wikilinks]]`, and shared tag clusters.
+  - Interactive node selection with side-drawer summary preview and "Open in Editor".
+  - Zoom in/out, pan, reset view, and search filter controls.
+  - Real-time relationship creation modal directly between nodes.
+  - Detection and filtering of isolated / unconnected notes.
+- [x] **Conversational AI Knowledge Assistant (`/dashboard/ai`):**
+  - Grounded RAG multi-turn chat over the user's notes and documents.
+  - Context scoping (Entire Second Brain vs. Specific Folder).
+  - Traceable citations: clickable citation pills linking directly to referenced source notes.
+  - Conversation history persistence, creation, and deletion.
+  - Suggested prompts for fast inquiry.
+- [x] **Global Unified Search Modal (`Cmd+K` / `Ctrl+K`):**
+  - Global modal with keyboard shortcuts and instant results across notes and folders.
+- [x] **Bi-directional Backlinks & Connections:**
+  - Backlinks and outgoing references panel integrated into the note editor.
+- [x] **Productivity & Action Items Engine (`/dashboard/tasks`):**
+  - Kanban board (To Do, In Progress, Done) and List views with priority tags and due dates.
+  - One-click AI action-item extraction from notes.

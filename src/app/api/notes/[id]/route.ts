@@ -15,7 +15,26 @@ export async function GET(
 
     const note = await prisma.note.findUnique({
       where: { id: params.id },
-      include: { tags: { include: { tag: true } }, versions: true, folder: true },
+      include: {
+        tags: { include: { tag: true } },
+        versions: { orderBy: { createdAt: 'desc' }, take: 10 },
+        folder: true,
+        sharedNotes: true,
+        targetRelationships: {
+          include: {
+            sourceNote: {
+              select: { id: true, title: true, summary: true },
+            },
+          },
+        },
+        sourceRelationships: {
+          include: {
+            targetNote: {
+              select: { id: true, title: true, summary: true },
+            },
+          },
+        },
+      },
     });
 
     if (!note) {
@@ -29,7 +48,7 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(note);
+    return NextResponse.json({ success: true, data: note });
   } catch (error) {
     console.error('Error fetching note:', error);
     return NextResponse.json(
@@ -61,33 +80,63 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { title, content, summary, bulletPoints, color, isPinned, isFavorite } = body;
+    const {
+      title,
+      content,
+      summary,
+      bulletPoints,
+      color,
+      isPinned,
+      isFavorite,
+      folderId,
+      restore,
+    } = body;
 
-    // Create version before updating
-    await prisma.noteVersion.create({
-      data: {
-        noteId: note.id,
-        content: note.content,
-        title: note.title,
-        summary: note.summary,
-      },
-    });
+    // Handle restore from trash
+    if (restore) {
+      const restored = await prisma.note.update({
+        where: { id: params.id },
+        data: { deletedAt: null },
+      });
+      return NextResponse.json({ success: true, data: restored });
+    }
+
+    // Only create version if content, title, or summary changed
+    const contentChanged =
+      (content !== undefined && content !== note.content) ||
+      (title !== undefined && title !== note.title) ||
+      (summary !== undefined && summary !== note.summary);
+
+    if (contentChanged) {
+      await prisma.noteVersion.create({
+        data: {
+          noteId: note.id,
+          content: note.content,
+          title: note.title,
+          summary: note.summary,
+        },
+      });
+    }
 
     const updatedNote = await prisma.note.update({
       where: { id: params.id },
       data: {
-        ...(title && { title }),
-        ...(content && { content }),
-        ...(summary && { summary }),
-        ...(bulletPoints && { bulletPoints }),
-        ...(color && { color }),
+        ...(title !== undefined && { title }),
+        ...(content !== undefined && { content }),
+        ...(summary !== undefined && { summary }),
+        ...(bulletPoints !== undefined && { bulletPoints }),
+        ...(color !== undefined && { color }),
         ...(isPinned !== undefined && { isPinned }),
         ...(isFavorite !== undefined && { isFavorite }),
+        ...(folderId !== undefined && { folderId: folderId || null }),
       },
-      include: { tags: { include: { tag: true } } },
+      include: {
+        tags: { include: { tag: true } },
+        folder: true,
+      },
     });
 
-    return NextResponse.json(updatedNote);
+    return NextResponse.json({ success: true, data: updatedNote });
   } catch (error) {
     console.error('Error updating note:', error);
     return NextResponse.json(
@@ -118,11 +167,23 @@ export async function DELETE(
       );
     }
 
-    await prisma.note.delete({
-      where: { id: params.id },
-    });
+    const { searchParams } = new URL(req.url);
+    const permanent = searchParams.get('permanent') === 'true';
 
-    return NextResponse.json({ message: 'Note deleted successfully' });
+    if (permanent) {
+      // Hard delete from DB
+      await prisma.note.delete({
+        where: { id: params.id },
+      });
+      return NextResponse.json({ success: true, message: 'Note permanently purged' });
+    } else {
+      // Soft delete: move to trash
+      await prisma.note.update({
+        where: { id: params.id },
+        data: { deletedAt: new Date() },
+      });
+      return NextResponse.json({ success: true, message: 'Note moved to trash' });
+    }
   } catch (error) {
     console.error('Error deleting note:', error);
     return NextResponse.json(

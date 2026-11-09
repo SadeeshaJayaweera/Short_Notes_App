@@ -5,6 +5,8 @@ import { parsePDF, parseWord, parseText } from '@/lib/parsers';
 import { summarizeText, generateTitle } from '@/lib/openai';
 import { prisma } from '@/lib/prisma';
 
+const MAX_FILE_SIZE = 15 * 1024 * 1024; // 15MB
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -24,6 +26,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { message: 'File exceeds maximum allowed size (15MB)' },
+        { status: 400 }
+      );
+    }
+
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileName = file.name;
     const mimeType = file.type;
@@ -31,57 +40,92 @@ export async function POST(req: NextRequest) {
     let parsedDoc;
 
     // Parse based on file type
-    if (mimeType === 'application/pdf') {
+    if (mimeType === 'application/pdf' || fileName.toLowerCase().endsWith('.pdf')) {
       parsedDoc = await parsePDF(buffer, fileName);
     } else if (
       mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-      mimeType === 'application/msword'
+      mimeType === 'application/msword' ||
+      fileName.toLowerCase().endsWith('.docx') ||
+      fileName.toLowerCase().endsWith('.doc')
     ) {
       parsedDoc = await parseWord(buffer, fileName);
-    } else if (mimeType.startsWith('text/')) {
+    } else if (
+      mimeType.startsWith('text/') ||
+      fileName.toLowerCase().endsWith('.txt') ||
+      fileName.toLowerCase().endsWith('.md')
+    ) {
       const text = buffer.toString('utf-8');
       parsedDoc = parseText(text, fileName);
     } else {
       return NextResponse.json(
-        { message: 'Unsupported file type. Please upload PDF, Word, or text files.' },
+        { message: 'Unsupported file type. Please upload PDF, Word (.docx), or text files.' },
         { status: 400 }
       );
     }
 
-    // Summarize text
-    const summaryResult = await summarizeText(parsedDoc.text, template);
+    let summary = '';
+    let bulletPoints: string[] = [];
+    let tagsToConnect: string[] = [];
+    let sentiment: string | null = null;
+    let title = fileName.replace(/\.[^/.]+$/, '');
 
-    // Generate title
-    const title = await generateTitle(parsedDoc.text);
+    // Attempt AI summarization with fallback
+    try {
+      const summaryResult = await summarizeText(parsedDoc.text, template);
+      summary = summaryResult.summary;
+      bulletPoints = summaryResult.bulletPoints;
+      tagsToConnect = summaryResult.tags || [];
+      sentiment = summaryResult.sentiment;
+
+      const aiTitle = await generateTitle(parsedDoc.text);
+      if (aiTitle && aiTitle !== 'Untitled Note') {
+        title = aiTitle;
+      }
+    } catch (aiError) {
+      console.warn('AI summarization unavailable, saving parsed document content directly:', aiError);
+      summary = parsedDoc.text.slice(0, 300).trim() + (parsedDoc.text.length > 300 ? '...' : '');
+      bulletPoints = parsedDoc.text
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l.length > 20)
+        .slice(0, 5);
+    }
 
     // Create note
     const note = await prisma.note.create({
       data: {
         title,
         originalText: parsedDoc.text,
-        summary: summaryResult.summary,
-        bulletPoints: summaryResult.bulletPoints,
-        content: summaryResult.bulletPoints.join('\n'),
+        summary,
+        bulletPoints,
+        content: bulletPoints.length > 0 ? bulletPoints.join('\n') : parsedDoc.text,
         userId: session.user.id,
-        folderId: folderId || undefined,
+        folderId: folderId || null,
         sourceType: parsedDoc.sourceType,
         fileName: parsedDoc.fileName,
-        sentiment: summaryResult.sentiment,
-        tags: {
-          create: summaryResult.tags?.map((tagName) => ({
-            tag: {
-              connectOrCreate: {
-                where: { name: tagName },
-                create: { name: tagName },
+        sentiment,
+        ...(tagsToConnect.length > 0
+          ? {
+              tags: {
+                create: tagsToConnect.map((tagName) => ({
+                  tag: {
+                    connectOrCreate: {
+                      where: { name: tagName.toLowerCase().trim() },
+                      create: { name: tagName.toLowerCase().trim() },
+                    },
+                  },
+                })),
               },
-            },
-          })) || [],
-        },
+            }
+          : {}),
       },
-      include: { tags: { include: { tag: true } } },
+      include: {
+        tags: { include: { tag: true } },
+        folder: true,
+      },
     });
 
-    // Create version
+    // Create initial version
     await prisma.noteVersion.create({
       data: {
         noteId: note.id,
@@ -91,7 +135,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return NextResponse.json(note, { status: 201 });
+    return NextResponse.json({ success: true, data: note }, { status: 201 });
   } catch (error: any) {
     console.error('Error uploading file:', error);
     return NextResponse.json(

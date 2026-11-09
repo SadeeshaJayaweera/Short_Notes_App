@@ -1,4 +1,10 @@
 import crypto from 'crypto';
+import { marked } from 'marked';
+
+export function renderMarkdown(content: string): string {
+  if (!content) return '';
+  return marked.parse(content, { async: false }) as string;
+}
 
 export function generateShareToken(): string {
   return crypto.randomBytes(32).toString('hex');

@@ -1,18 +1,23 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { summarizeText, generateTitle } from '@/lib/openai';
 import { z } from 'zod';
-import { apiHandler, validateRequestBody, ApiResponse } from '@/lib/api-handler';
+import { apiHandler, validateRequestBody } from '@/lib/api-handler';
 import { AuthenticationError, ValidationError, ErrorLogger } from '@/lib/errors';
 
 const createNoteSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  originalText: z.string().min(1, 'Content is required'),
-  folderId: z.string().optional(),
-  sourceType: z.enum(['manual', 'pdf', 'word', 'text']).default('manual'),
-  fileName: z.string().optional(),
+  title: z.string().optional().default('Untitled Note'),
+  originalText: z.string().optional(),
+  content: z.string().optional(),
+  summary: z.string().optional(),
+  bulletPoints: z.array(z.string()).optional(),
+  folderId: z.string().nullable().optional(),
+  sourceType: z.enum(['manual', 'pdf', 'word', 'text', 'web']).default('manual'),
+  fileName: z.string().nullable().optional(),
+  generateAI: z.boolean().optional().default(false),
+  template: z.string().optional(),
 });
 
 export const GET = apiHandler(async (req: NextRequest) => {
@@ -24,25 +29,43 @@ export const GET = apiHandler(async (req: NextRequest) => {
   const { searchParams } = new URL(req.url);
   const folderId = searchParams.get('folderId');
   const search = searchParams.get('search');
+  const trash = searchParams.get('trash') === 'true';
+  const pinnedOnly = searchParams.get('pinned') === 'true';
+  const favoriteOnly = searchParams.get('favorite') === 'true';
   const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
-  const limit = 20;
+  const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '20')));
   const skip = (page - 1) * limit;
 
   try {
-    const where: any = { userId: session.user.id };
+    const where: any = {
+      userId: session.user.id,
+      deletedAt: trash ? { not: null } : null,
+    };
+
     if (folderId) where.folderId = folderId;
-    if (search) {
+    if (pinnedOnly) where.isPinned = true;
+    if (favoriteOnly) where.isFavorite = true;
+
+    if (search && search.trim()) {
+      const q = search.trim();
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { summary: { contains: search, mode: 'insensitive' } },
+        { title: { contains: q, mode: 'insensitive' } },
+        { content: { contains: q, mode: 'insensitive' } },
+        { summary: { contains: q, mode: 'insensitive' } },
       ];
     }
 
     const [notes, total] = await Promise.all([
       prisma.note.findMany({
         where,
-        include: { tags: { include: { tag: true } }, folder: true },
-        orderBy: { createdAt: 'desc' },
+        include: {
+          tags: { include: { tag: true } },
+          folder: true,
+        },
+        orderBy: [
+          { isPinned: 'desc' },
+          { updatedAt: 'desc' },
+        ],
         skip,
         take: limit,
       }),
@@ -73,41 +96,87 @@ export const POST = apiHandler(async (req: NextRequest) => {
     createNoteSchema.parseAsync(data)
   );
 
+  const rawText = body.originalText || body.content || '';
+  if (!rawText.trim() && !body.title) {
+    throw new ValidationError('Note content or title is required');
+  }
+
   try {
-    // Validate content length
-    if (body.originalText.length > 500000) {
+    if (rawText.length > 500000) {
       throw new ValidationError('Content is too long (max 500KB)', {
         maxLength: 500000,
-        currentLength: body.originalText.length,
+        currentLength: rawText.length,
       });
     }
 
-    // Summarize the text using OpenAI
-    const summaryResult = await summarizeText(body.originalText);
+    let summary = body.summary || '';
+    let bulletPoints = body.bulletPoints || [];
+    let tagsToConnect: string[] = [];
+    let sentiment: string | null = null;
+    let finalTitle = body.title && body.title.trim() ? body.title.trim() : 'Untitled Note';
 
-    // Generate auto title if not provided
-    const finalTitle =
-      body.title && body.title !== 'Untitled Note'
-        ? body.title
-        : await generateTitle(body.originalText);
+    // If AI generation is requested or document upload has raw text
+    if (body.generateAI && rawText.trim().length > 30) {
+      try {
+        const summaryResult = await summarizeText(rawText, body.template);
+        summary = summaryResult.summary || summary;
+        bulletPoints = summaryResult.bulletPoints || bulletPoints;
+        tagsToConnect = summaryResult.tags || [];
+        sentiment = summaryResult.sentiment || null;
 
-    // Create the note
+        if (finalTitle === 'Untitled Note') {
+          const autoTitle = await generateTitle(rawText);
+          if (autoTitle) finalTitle = autoTitle;
+        }
+      } catch (aiErr) {
+        console.warn('AI summarization failed or was skipped, falling back to local text:', aiErr);
+        if (!summary && rawText.length > 0) {
+          summary = rawText.slice(0, 200).trim() + (rawText.length > 200 ? '...' : '');
+        }
+      }
+    } else {
+      if (!summary && rawText.length > 0) {
+        summary = rawText.slice(0, 200).trim() + (rawText.length > 200 ? '...' : '');
+      }
+    }
+
+    const content = body.content || (bulletPoints.length > 0 ? bulletPoints.join('\n') : rawText);
+
+    // Create note in database
     const note = await prisma.note.create({
       data: {
         title: finalTitle,
-        originalText: body.originalText,
-        summary: summaryResult.summary,
-        bulletPoints: summaryResult.bulletPoints,
-        content: summaryResult.bulletPoints.join('\n'),
+        originalText: rawText,
+        summary: summary,
+        bulletPoints: bulletPoints,
+        content: content,
         userId: session.user.id,
-        folderId: body.folderId,
+        folderId: body.folderId || null,
         sourceType: body.sourceType,
-        fileName: body.fileName,
+        fileName: body.fileName || null,
+        sentiment: sentiment,
+        ...(tagsToConnect.length > 0
+          ? {
+              tags: {
+                create: tagsToConnect.map((tagName) => ({
+                  tag: {
+                    connectOrCreate: {
+                      where: { name: tagName.toLowerCase().trim() },
+                      create: { name: tagName.toLowerCase().trim() },
+                    },
+                  },
+                })),
+              },
+            }
+          : {}),
       },
-      include: { tags: { include: { tag: true } }, folder: true },
+      include: {
+        tags: { include: { tag: true } },
+        folder: true,
+      },
     });
 
-    // Store version
+    // Create initial version checkpoint
     await prisma.noteVersion.create({
       data: {
         noteId: note.id,
@@ -130,4 +199,3 @@ export const POST = apiHandler(async (req: NextRequest) => {
     throw error;
   }
 });
-
