@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
         {children}
         <Toaster position="bottom-right" />
       </ThemeProvider>
