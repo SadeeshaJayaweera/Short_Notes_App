@@ -1,40 +1,81 @@
 <div align="center">
 
-# 📝 Short Notes
+# 📝 Short Notes 2.0
 
-### AI Powered Your Short Note Assistance
+### Your Personal AI-Powered Second Brain
 
-*Transform lengthy documents into crystal-clear bullet points in seconds*
+*Capture, understand, connect, recall, and act on your personal knowledge — with grounded AI that never hallucinates.*
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-pgvector-336791)](https://www.postgresql.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-5.0-2D3748)](https://www.prisma.io/)
-[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991)](https://openai.com/)
+[![MCP Server](https://img.shields.io/badge/MCP-Supported-purple)](https://modelcontextprotocol.io/)
+[![SuperMemo SM-2](https://img.shields.io/badge/Active%20Recall-SM--2-indigo)](https://en.wikipedia.org/wiki/SuperMemo)
 
-[Live Demo](#) • [Documentation](#) • [Report Bug](https://github.com/SadeeshaJayaweera/Short_Notes_App/issues) • [Request Feature](https://github.com/SadeeshaJayaweera/Short_Notes_App/issues)
+[Explore Features](#-key-features) • [Application Preview](#-application-preview-light--dark-mode) • [Developer API & MCP](#-model-context-protocol-mcp-server) • [Installation Guide](docs/SYSTEM_ARCHITECTURE.md)
 
 </div>
 
 ---
 
-## 📸 Application Preview
-<div align="center">
-  <p align="center"><b>Beautiful Modern UI - White Theme Mockups</b></p>
-  
-  <p align="center"><i>Landing Page & Branding</i></p>
-  <img src="public/screenshots/mockup_landing.png" alt="Short Notes Landing Page Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
-  
-  <p align="center"><i>Secure Authentication</i></p>
-  <img src="public/screenshots/mockup_login.png" alt="Short Notes Login Page Preview" width="400" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
-  <img src="public/screenshots/mockup_register.png" alt="Short Notes Register Page Preview" width="400" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+## 📸 Application Preview (Light & Dark Mode)
 
-  <p align="center"><i>Personalized Dashboard (Sadeesha Jay)</i></p>
-  <img src="public/screenshots/mockup_dashboard.png" alt="Short Notes Dashboard Preview" width="800" style="border-radius: 8px; margin-bottom: 20px; border: 1px solid #eaeaea;" />
+Short Notes 2.0 defaults to a **clean, high-contrast White Theme** designed with modern Human-Computer Interaction (HCI) standards, and includes an instantaneous Day/Night toggle across all pages.
 
-  <p align="center"><i>AI Generated Summaries</i></p>
-  <img src="public/screenshots/mockup_note.png" alt="Short Notes AI Summary Preview" width="800" style="border-radius: 8px; border: 1px solid #eaeaea;" />
-</div>
+### 🌐 1. Interactive Landing Page & Second Brain Flow
+*Capture → Understand → Connect → Recall → Act philosophy with live interactive demo sandbox.*
+
+| ☀️ Light Mode (Default) | 🌙 Dark Mode (Night Mode) |
+|:---:|:---:|
+| <img src="public/screenshots/01-landing-light.png" alt="Short Notes Landing Page - Light Mode" width="100%" /> | <img src="public/screenshots/02-landing-dark.png" alt="Short Notes Landing Page - Dark Mode" width="100%" /> |
+
+---
+
+### 🔐 2. Authentication & 1-Click Demo Access
+*Split-screen layout with interactive feature spotlight, password visibility toggles, real-time password strength meter, and 1-click demo account login.*
+
+| Screen | ☀️ Light Mode (Default) | 🌙 Dark Mode |
+|:---|:---:|:---:|
+| **Sign In**<br>*(Includes 1-click Demo Account fill)* | <img src="public/screenshots/03-login-light.png" alt="Login Page Light Mode" width="100%" /> | <img src="public/screenshots/04-login-dark.png" alt="Login Page Dark Mode" width="100%" /> |
+| **Create Account**<br>*(Live strength meter & checklist)* | <img src="public/screenshots/05-register-light.png" alt="Register Page Light Mode" width="100%" /> | <img src="public/screenshots/06-register-dark.png" alt="Register Page Dark Mode" width="100%" /> |
+
+---
+
+### 📊 3. Personal Second Brain Dashboard (HCI Command Center)
+*Dynamic time-aware telemetry greeting, multi-mode instant capture (Note/Idea/Action/Resource) with tag chips, Ask AI prompt cloud, live search filter, and optimistic Star/Pin controls.*
+
+| ☀️ Light Mode (High-Contrast HCI Design) | 🌙 Dark Mode (Deep Space Night Mode) |
+|:---:|:---:|
+| <img src="public/screenshots/07-dashboard-light.png" alt="Dashboard Light Mode" width="100%" /> | <img src="public/screenshots/08-dashboard-dark.png" alt="Dashboard Dark Mode" width="100%" /> |
+
+---
+
+### 🎓 4. Active Recall Study Mode (SuperMemo SM-2)
+*Turn any document or note into interactive flashcards and quizzes. Dynamic next-review scheduling based on the cognitive Ebbinghaus forgetting curve.*
+
+| ☀️ Light Mode | 🌙 Dark Mode |
+|:---:|:---:|
+| <img src="public/screenshots/10-study-mode-light.png" alt="Study Mode Light" width="100%" /> | <img src="public/screenshots/09-study-mode-dark.png" alt="Study Mode Dark" width="100%" /> |
+
+---
+
+### 🕸️ 5. Interactive Knowledge Graph & Wikilink Network
+*Discover unexpected connections between ideas, notes, concepts, and tags in an interactive canvas.*
+
+| ☀️ Light Mode | 🌙 Dark Mode |
+|:---:|:---:|
+| <img src="public/screenshots/11-knowledge-graph-light.png" alt="Knowledge Graph Light" width="100%" /> | <img src="public/screenshots/12-knowledge-graph-dark.png" alt="Knowledge Graph Dark" width="100%" /> |
+
+---
+
+### 🧠 6. Grounded RAG AI Assistant with Clickable Citations
+*Chat with your entire personal knowledge vault. Zero hallucinations—every response is tied to verified note excerpts with traceable footnote citations.*
+
+| ☀️ Light Mode | 🌙 Dark Mode |
+|:---:|:---:|
+| <img src="public/screenshots/13-ai-assistant-light.png" alt="AI Assistant Light" width="100%" /> | <img src="public/screenshots/14-ai-assistant-dark.png" alt="AI Assistant Dark" width="100%" /> |
 
 ---
 
