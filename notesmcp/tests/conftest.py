@@ -5,7 +5,10 @@ from sqlalchemy.orm import sessionmaker
 
 from notesmcp.schema import Base
 
-TEST_DATABASE_URL = "postgresql:///notesmcp_test"
+TEST_DATABASE_URL = os.getenv(
+    "TEST_DATABASE_URL",
+    "postgresql+psycopg2:///notesmcp_test",
+)
 
 @pytest.fixture(scope="session")
 def engine():
